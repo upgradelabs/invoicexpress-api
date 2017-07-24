@@ -1,9 +1,9 @@
 <?php
-namespace rpsimao\Models;
+namespace rpsimao\InvoiceXpressAPI\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\StreamInterface;
-use rpsimao\Service\InvoiceXpressAPI;
+use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 
 
 /**

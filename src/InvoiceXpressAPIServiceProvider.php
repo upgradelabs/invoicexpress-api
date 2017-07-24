@@ -3,8 +3,8 @@
 namespace rpsimao\InvoiceXpressAPI;
 
 use Illuminate\Support\ServiceProvider;
-use rpsimao\Models\InvoiceXpressAPIClients;
-use rpsimao\Service\InvoiceXpressAPI;
+use rpsimao\InvoiceXpressAPI\Models\InvoiceXpressAPIClients;
+use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 use \Config as Config;
 
 class InvoiceXpressAPIServiceProvider extends ServiceProvider

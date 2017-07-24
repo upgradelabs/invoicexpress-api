@@ -6,7 +6,7 @@
  * Time: 20:47
  */
 
-namespace rpsimao\Service;
+namespace rpsimao\InvoiceXpressAPI\Service;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\StreamInterface;
