@@ -36,7 +36,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
             ], 'ivxapi-migrations');
         }
 
-         $this->app->bind(InvoiceXpressAPIClients::class);
+
     }
 
     /**
@@ -46,17 +46,20 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
         $this->mergeConfigFrom(
             __DIR__.'/../config/invoicexpress-api.php',
             'invoicexpress-api'
         );
         
-         $this->app->singleton('InvoiceXpressAPI', function ($app) {
+         $this->app->bind('InvoiceXpressAPI', function () {
 	         return new InvoiceXpressAPI();
         });
 
-        $this->app->alias('InvoiceXpressAPI', 'Service\InvoiceXpressAPI');
+	    $this->app->bind('InvoiceXpressModel', function() {
+	    	return new InvoiceXpressAPIClients();
+	    });
+
+        $this->app->alias('InvoiceXpressAPI', InvoiceXpressAPI::class);
     }
 
     /**
