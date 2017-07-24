@@ -97,7 +97,7 @@ These will be read by the config file:
 
 There are 2 Classes for working with the API
 
-###1 - Eloquent Model:
+### 1 - Eloquent Model:
 
 It has one custom function for retrieve all your customers and put them into the DB.
 
@@ -110,6 +110,6 @@ You can make a cron job for retrieving them periodically.
 
 ```
 
-###2 - Interact with the API:
+### 2 - Interact with the API:
 
 
