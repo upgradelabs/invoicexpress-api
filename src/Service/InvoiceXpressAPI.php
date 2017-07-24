@@ -46,7 +46,7 @@ class InvoiceXpressAPI
      * Header to be sent to the POST|PUT REQUEST API
      * @var string
      */
-    protected $headers = 'Content-Type: application/xml; charset=utf-8';
+    protected $headers;
 
     /**
      * The query to send to the API
@@ -78,6 +78,17 @@ class InvoiceXpressAPI
     {
         $this->method = $method;
     }
+
+
+    /**
+     * @return array
+     */
+    private function getHeaders(): array
+    {
+        return ['Content-Type' => 'application/xml; charset=utf-8'];
+    }
+
+
 
     /**
      * @return string
@@ -112,22 +123,6 @@ class InvoiceXpressAPI
     }
 
     /**
-     * @return string
-     */
-    private function getHeaders(): string
-    {
-        return $this->headers;
-    }
-
-    /**
-     * @param string $headers
-     */
-    public function setHeaders(string $headers)
-    {
-        $this->headers = $headers;
-    }
-    
-    /**
      * @return array
      */
     private function getQuery(): array
@@ -145,17 +140,86 @@ class InvoiceXpressAPI
 
     /**
      * Send requests to InvoiceXpress API
-     * @return \Psr\Http\Message\StreamInterface
+     *
      */
-    public function talkToAPI() :StreamInterface
+    public function talkToAPI()
     {
-        $response = $this->client->request(
-            $this->getMethod(), $this->getUrl() . $this->getEndpoint(),
+        switch (strtoupper($this->getMethod())){
+            case 'GET':
+                return $this->_get();
+                break;
+
+            case 'POST':
+                return $this->_post();
+                break;
+
+            case 'PUT':
+                return $this->_put();
+                break;
+
+            case 'DELETE':
+                return $this->_delete();
+                break;
+        }
+    }
+
+    /**
+     * Send GET Request
+     * @return StreamInterface
+     */
+    private function _get() :StreamInterface
+    {
+        $response = $this->client->get(
+            $this->getUrl() . $this->getEndpoint(),
             [
                 'query' => $this->getQuery()
             ]
         );
 
         return $response->getBody();
+    }
+
+    /**
+     * Send POST request
+     * @return StreamInterface
+     */
+    private function _post() :StreamInterface
+    {
+
+        $response = $this->client->post(
+            $this->getUrl() . $this->getEndpoint(),
+            [
+                'headers' => ['Content-Type' => 'application/xml; charset=utf-8'],
+                'query' => $this->getQuery()
+            ]
+        );
+
+        return $response->getBody();
+    }
+
+    /**
+     * Send PUT request
+     * @return StreamInterface
+     */
+    private function _put() :StreamInterface
+    {
+        $response = $this->client->put(
+            $this->getUrl() . $this->getEndpoint(),
+            [
+                'headers' => $this->getHeaders(),
+                'query' => $this->getQuery()
+            ]
+        );
+
+        return $response->getBody();
+    }
+
+    /**
+     * Send DELETE request
+     * @return StreamInterface
+     */
+    private function _delete() :StreamInterface
+    {
+
     }
 }
