@@ -47,8 +47,8 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
     public function register()
     {
 	    $this->mergeConfigFrom(
-		    __DIR__.'/../config/invoicexpress-api.php',
-		    'invoicexpress-api'
+		    __DIR__.'/../config/invoicexpress.php',
+		    'invoicexpress'
 	    );
 
 	    $this->app->singleton( InvoiceXpressAPI::class, function (){
