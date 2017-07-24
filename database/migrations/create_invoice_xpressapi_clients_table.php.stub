@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInvoiceXpressClientsTable extends Migration
+class CreateInvoiceXpressapiClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateInvoiceXpressClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoice_xpress_clients', function (Blueprint $table) {
+        Schema::create('invoice_xpressapi_clients', function (Blueprint $table) {
             $table->increments('id');
 	        $table->bigInteger( 'client_id')->unique()->unsigned();
 	        $table->string( 'name')->nullable();
