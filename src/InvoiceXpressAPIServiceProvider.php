@@ -31,7 +31,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/../database/migrations/create_invoice_xpress_clients_table.php.stub' => $this->app->databasePath()."/migrations/{$timestamp}_create_invoice_xpress_clients_table.php",
-            ], 'migrations');
+            ], 'ivxapi-migrations');
         }
 
          $this->app->bind(InvoiceXpressAPIContract::class,  rpsimao\Models\InvoiceXpressAPIClients::class);
