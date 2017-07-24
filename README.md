@@ -36,10 +36,10 @@ rpsimao\InvoiceXpressAPI\InvoiceXpressAPIServiceProvider::class,
 
 ```
 
-###Publish configuration
+### Publish configuration
 
 ```bash
-$ php artisan vendor:publish --tag=ivxapi-config
+$ php artisan vendor:publish --tag=invoicexpress
 ```
 
 In the configuration file, all the API endpoints are accessible, so for example you need to generate an invoice PDF:
@@ -62,7 +62,7 @@ The first argument MUST be an array (throw an error if not), and the **number of
 
 
 
-###Migrations
+### Migrations
 
 ```bash
 $ php artisan vendor:publish --tag=ivxapi-migrations
