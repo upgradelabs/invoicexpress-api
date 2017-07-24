@@ -39,7 +39,7 @@ rpsimao\InvoiceXpressAPI\InvoiceXpressAPIServiceProvider::class,
 ### Publish configuration
 
 ```bash
-$ php artisan vendor:publish --tag=invoicexpress
+$ php artisan vendor:publish --tag=ivxapi-config
 ```
 
 In the configuration file, all the API endpoints are accessible, so for example you need to generate an invoice PDF:
