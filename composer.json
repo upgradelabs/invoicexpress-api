@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "rpsimao\\InvoiceXpressAPI\\": "src"
+            "rpsimao\\InvoiceXpressAPI\\": "src/"
         },
         "files":[
             "src/Helpers/invoicexpress-api.php"
