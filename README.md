@@ -111,5 +111,10 @@ You can make a cron job for retrieving them periodically.
 ```
 
 ### 2 - Interact with the API:
+```php
 
+
+
+
+```
 
