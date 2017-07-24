@@ -46,20 +46,20 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/invoicexpress-api.php',
-            'invoicexpress-api'
-        );
-        
-         $this->app->bind('InvoiceXpressAPI', function () {
-	         return new InvoiceXpressAPI();
-        });
+	    $this->mergeConfigFrom(
+		    __DIR__.'/../config/invoicexpress-api.php',
+		    'invoicexpress-api'
+	    );
 
-	    $this->app->bind('InvoiceXpressModel', function() {
-	    	return new InvoiceXpressAPIClients();
+	    $this->app->singleton( InvoiceXpressAPI::class, function (){
+		    return new InvoiceXpressAPI();
+	    });
+	    $this->app->alias(InvoiceXpressAPI::class, 'InvoiceXpressAPI');
+
+	    $this->app->singleton( InvoiceXpressAPIClients::class, function (){
+		    return new InvoiceXpressAPIClients();
 	    });
 
-        $this->app->alias('InvoiceXpressAPI', InvoiceXpressAPI::class);
     }
 
     /**
