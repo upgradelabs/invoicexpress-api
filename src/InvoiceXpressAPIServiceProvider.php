@@ -60,6 +60,8 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
 		    return new InvoiceXpressAPIClients();
 	    });
 
+	    $this->app->alias(InvoiceXpressAPIClients::class, 'InvoiceXpressAPIClients');
+
     }
 
     /**
@@ -69,7 +71,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['InvoiceXpressAPI'];
+        return ['InvoiceXpressAPI', 'InvoiceXpressAPIClients'];
     }
 
 }
