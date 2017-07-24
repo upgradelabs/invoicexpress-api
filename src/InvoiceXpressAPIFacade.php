@@ -13,6 +13,6 @@ class InvoiceXpressAPIFacade extends Facade {
      */
     protected static function getFacadeAccessor()
     {
-    	return 'InvoiceXpressAPIClients';
+    	return 'InvoiceXpressapiClients';
     }
 }

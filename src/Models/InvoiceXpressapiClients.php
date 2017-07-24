@@ -7,14 +7,14 @@ use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 
 
 /**
- * Class InvoiceXpressAPIClients
+ * Class InvoiceXpressapiClients
  * @package rpsimao
  * @property $created_at
  * @property $id
  * @property $updated_at
  */
 
-class InvoiceXpressAPIClients extends Model
+class InvoiceXpressapiClients extends Model
 {
     protected $fillable = [
     	'client_id', 'name', 'code', 'email', 'language', 'address', 'city', 'postal_code', 'fiscal_id', 'website', 'country', 'phone',

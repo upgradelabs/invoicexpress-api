@@ -3,7 +3,7 @@
 namespace rpsimao\InvoiceXpressAPI;
 
 use Illuminate\Support\ServiceProvider;
-use rpsimao\InvoiceXpressAPI\Models\InvoiceXpressAPIClients;
+use rpsimao\InvoiceXpressAPI\Models\InvoiceXpressapiClients;
 use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 use \Config as Config;
 
@@ -32,7 +32,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
-                __DIR__.'/../database/migrations/create_invoice_xpress_clients_table.php.stub' => $this->app->databasePath()."/migrations/{$timestamp}_create_invoice_xpress_clients_table.php",
+                __DIR__ . '/../database/migrations/create_invoice_xpressapi_clients_table.php.stub' => $this->app->databasePath()."/migrations/{$timestamp}_create_invoice_xpressapi_clients_table.php",
             ], 'ivxapi-migrations');
         }
 
@@ -56,11 +56,11 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
 	    });
 	    $this->app->alias(InvoiceXpressAPI::class, 'InvoiceXpressAPI');
 
-	    $this->app->singleton( InvoiceXpressAPIClients::class, function (){
-		    return new InvoiceXpressAPIClients();
+	    $this->app->singleton( InvoiceXpressapiClients::class, function (){
+		    return new InvoiceXpressapiClients();
 	    });
 
-	    $this->app->alias(InvoiceXpressAPIClients::class, 'InvoiceXpressAPIClients');
+	    $this->app->alias(InvoiceXpressapiClients::class, 'InvoiceXpressapiClients');
 
     }
 
@@ -71,7 +71,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['InvoiceXpressAPI', 'InvoiceXpressAPIClients'];
+        return ['InvoiceXpressAPI', 'InvoiceXpressapiClients'];
     }
 
 }
