@@ -3,6 +3,8 @@
 namespace rpsimao\InvoiceXpressAPI;
 
 use Illuminate\Support\ServiceProvider;
+use rpsimao\Models\InvoiceXpressAPIClients;
+use rpsimao\Service\InvoiceXpressAPI;
 use \Config as Config;
 
 class InvoiceXpressAPIServiceProvider extends ServiceProvider
@@ -34,7 +36,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
             ], 'ivxapi-migrations');
         }
 
-         $this->app->bind(InvoiceXpressAPIContract::class,  rpsimao\Models\InvoiceXpressAPIClients::class);
+         $this->app->bind(InvoiceXpressAPIClients::class);
     }
 
     /**
@@ -51,8 +53,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
         );
         
          $this->app->singleton('InvoiceXpressAPI', function ($app) {
-
-            return new Service\InvoiceXpressAPI();
+	         return new InvoiceXpressAPI();
         });
 
         $this->app->alias('InvoiceXpressAPI', 'Service\InvoiceXpressAPI');

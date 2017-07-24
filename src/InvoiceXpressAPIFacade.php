@@ -1,10 +1,10 @@
 <?php
 
-namespace rpsimao\LaravelPushbullet;
+namespace rpsimao\InvoiceXpressAPI;
 
 use Illuminate\Support\Facades\Facade;
 
-class LaravelPushbulletFacade extends Facade {
+class InvoiceXpressAPIFacade extends Facade {
 
     /**
      * Get the registered name of the component.
