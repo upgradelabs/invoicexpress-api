@@ -24,7 +24,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
     {
          $this->publishes([
             __DIR__.'/../config/permission.php' => $this->app->configPath().'/invoicexpress-api.php  ',
-        ], 'config');
+        ], 'ivxapi-config');
 
         if (! class_exists('CreateInvoiceXpressClientsTable')) {
             $timestamp = date('Y_m_d_His', time());

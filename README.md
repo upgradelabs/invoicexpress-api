@@ -15,7 +15,7 @@ $ composer require rpsimao/invoicexpress-api
 
 In your config/app.php
 ``` php
-rpsimao\InvoiceXpressAPI\IVXAPIServiceProvider::class,
+rpsimao\InvoiceXpressAPI\InvoiceXpressAPIServiceProvider::class,
 ```
 
 Publish configuration
