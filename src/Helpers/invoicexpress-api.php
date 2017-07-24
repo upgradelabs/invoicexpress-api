@@ -4,13 +4,13 @@ if (!function_exists('endpoint_replace')) {
 
 	/**
 	 * @param array $values
-	 * @param string $string
+	 * @param string $endpoint
 	 *
 	 * @return string
 	 */
-	function endpoint_replace(array $values, string $string) :string
+	function endpoint_replace(array $values, string $endpoint) :string
 	{
-		preg_match_all("/{(.*?)}/", $endpoint, $output);
+		preg_match_all('/{(.*?)}/', $endpoint, $output);
 
 		$b = count($output[0]);
 		$v = count($values);
