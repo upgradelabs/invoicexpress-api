@@ -25,7 +25,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
     public function boot()
     {
          $this->publishes([
-            __DIR__.'/../config/invoicexpress.php' => $this->app->configPath().'/invoicexpress.php  ',
+            __DIR__.'/../config/invoicexpress.php' => $this->app->configPath().'/invoicexpress.php',
         ], 'invoicexpress');
 
         if (! class_exists('CreateInvoiceXpressClientsTable')) {
