@@ -1,13 +1,12 @@
 # Laravel InvoiceXpress API
 
-# NOT READY FOR PRODUCTION YET!!
 
 
 Laravel package to interact with InvoiceXpress API
 
 **Everyone is allowed to help getting this package bigger and better!**
 
-## Install
+## 1) Install
 
 Via Composer
 
@@ -29,7 +28,7 @@ rpsimao\InvoiceXpressAPI\InvoiceXpressAPIServiceProvider::class,
 
 .....
 
-'InvoiceXpressAPIClients' =>  rpsimao\InvoiceXpressAPI\InvoiceXpressAPIFacade::class,
+'InvoiceXpressClients' =>  rpsimao\InvoiceXpressAPI\InvoiceXpressAPIFacade::class,
 
 .....
 
@@ -69,7 +68,7 @@ $ php artisan vendor:publish --tag=ivxapi-migrations
 $ php artisan migrate
 ```
 
-## Configuration
+## 2) Configuration
 
 Add to your .env file your API Key and Account name
 
@@ -93,7 +92,7 @@ These will be read by the config file:
 
 ```
 
-## Usage
+## 3) Usage
 
 There are 2 Classes for working with the API
 
@@ -103,17 +102,40 @@ It has one custom function for retrieve all your customers and put them into the
 
 You can make a cron job for retrieving them periodically.
 
+
+
 ```php
 
-
+//Accepts a flag (true or false[default])
+InvoiceXpressClients::getAllClientsFromAPI(true);
 
 
 ```
+If you pass the `true` flag the function insert the clients into the database. `False` or none, it returns an array with all your clients.
+
+If the client already exists, it checks if there are values to be updated, if not, it ignores.
+
 
 ### 2 - Interact with the API:
 ```php
 
+use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 
+//Making a GET REQUEST
+
+$client = new InvoiceXpressAPI();
+$client->setMethod('GET');
+$client->setUrl(config('invoicexpress.my_url'));
+$client->setEndpoint(config('invoicexpress.endpoints.clients.list_all'));
+
+
+$client->setQuery(['api_key' => config('invoicexpress.api_key')]);
+$data = $client->talkToAPI();
+
+$xml = simplexml_load_string($data);
+
+.....
+//do whatever you need to do
 
 
 ```
