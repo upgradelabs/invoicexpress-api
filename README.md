@@ -274,12 +274,12 @@ $client = new InvoiceXpressAPI();
 .....
 $client->setQuery([
 	'api_key' => $this->api_key,
-		'client-id' => '{client-id}',
-			'client' => [
-				'name'  => '{client-name}',
-				'code'  => '{client-code}',
-				'phone' => '{client-phone}'
-			]
+	'client-id' => '{client-id}',
+		'client' => [
+			'name'  => '{client-name}',
+			'code'  => '{client-code}',
+			'phone' => '{client-phone}'
+		]
 	]);
 	
 ```
