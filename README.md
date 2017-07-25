@@ -209,6 +209,7 @@ $client = new InvoiceXpressAPI();
 			'name' => 'My awesome Client',
 			'code' => '123',
 			'phone' =>  999888777
+			//.... insert more values ....
 
 		]
 	]);
