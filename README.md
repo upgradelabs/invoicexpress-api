@@ -125,7 +125,7 @@ $client->setQuery(['api_key' => $api_key]);
 
 **There are 2 Classes for working with the API:**
 
-### 1 - Eloquent Model:
+### 3.1 - Eloquent Model:
 
 It has one custom function, for retrieve all your customers and put them into the DB.
 
@@ -144,7 +144,7 @@ If you pass the `true` flag, the function inserts the clients into the database.
 
 If the client already exists, it updates the values.
 
-### 1.1 One-to-One relationship with Laravel::Auth()
+### 3.1.1 One-to-One relationship with Laravel::Auth()
 
 If you wish to have a relation between the InvoiceXpress and your app Users, do the following:
 
@@ -173,7 +173,7 @@ public function invoicexpress()
 You now have a one-to-one relationship. Now you only have to insert the user_id in the InvoiceXpress table.
 
 
-### 2 - Interact with the API:
+### 3.2 - Interact with the API:
 ```php
 
 use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
@@ -269,7 +269,7 @@ $response = $client->toXML();
 
 ```
 
-## 3) Tests
+## 4) Tests
 
 Currently there are 3 tests available.
 
