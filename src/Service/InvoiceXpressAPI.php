@@ -210,9 +210,9 @@ class InvoiceXpressAPI
 
 	/**
 	 * Send PUT request
-	 * @return StreamInterface
+	 *
 	 */
-	private function _put(): StreamInterface
+	private function _put()
 	{
 		$response = $this->client->put(
 			$this->getUrl() . $this->getEndpoint(),
@@ -221,6 +221,15 @@ class InvoiceXpressAPI
 				'query' => $this->getQuery()
 			]
 		);
+
+		$responses = [200, 201];
+		if (in_array( $response->getStatusCode(),  $responses, true))
+		{
+			return [
+				'header' => $response->getStatusCode(),
+				'message' => 'CREATED'
+			];
+		}
 
 		return $response->getBody();
 	}
@@ -231,16 +240,43 @@ class InvoiceXpressAPI
 	 */
 	public function toJSON()
 	{
+		if (is_array(  $this->talkToAPI()))
+		{
+			return json_encode($this->talkToAPI());
+		}
+
 		$xml = simplexml_load_string($this->talkToAPI(), 'SimpleXMLElement', LIBXML_NOCDATA);
 		return json_encode($xml);
 	}
 
 	/**
 	 * Return values as a XML
-	 * @return \SimpleXMLElement
+	 *
 	 */
-	public function toXML(): \SimpleXMLElement
+	public function toXML()
 	{
+		if (is_array(  $this->talkToAPI()))
+		{
+			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
+			$data = $this->talkToAPI();
+			$this->array_to_xml($data, $xml_data);
+			return  $xml_data->asXML();
+		}
+
 		return simplexml_load_string( $this->talkToAPI());
+	}
+
+	private function array_to_xml( array $data, \SimpleXMLElement $xml_data ) {
+		foreach( $data as $key => $value ) {
+			if( is_numeric($key) ){
+				$key = 'item'.$key; //dealing with <0/>..<n/> issues
+			}
+			if( is_array($value) ) {
+				$subnode = $xml_data->addChild($key);
+				$this->array_to_xml($value, $subnode);
+			} else {
+				$xml_data->addChild("$key",htmlspecialchars("$value"));
+			}
+		}
 	}
 }
