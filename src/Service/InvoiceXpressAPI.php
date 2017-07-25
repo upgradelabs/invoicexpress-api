@@ -65,6 +65,33 @@ class InvoiceXpressAPI
 	}
 
 	/**
+	 * Method for retrieving you API Key
+	 * @param string $username
+	 * @param string $password
+	 *
+	 * @return string
+	 */
+
+	public function getAPIKey(string $username, string $password): string
+	{
+		$this->setUrl('https://www.app.invoicexpress.com/');
+		$this->setMethod('post');
+		$this->setEndpoint('login.xml');
+		$this->setQuery([
+			'credentials' => [
+				'login'    => $username,
+				'password' => $password
+			]
+		]);
+		$data = $this->talkToAPI();
+
+		$xml = simplexml_load_string($data);
+
+		return $xml->account->api_key;
+
+	}
+
+	/**
 	 * @return string
 	 */
 	private function getMethod(): string

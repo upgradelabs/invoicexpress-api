@@ -6,6 +6,8 @@ return [
 	'account_name' => env('INVOICEXPRESS_ACCOUNT_NAME'),
 	'app_url'      => 'https://www.app.invoicexpress.com/',
 	'my_url'       => 'https://'.env('INVOICEXPRESS_ACCOUNT_NAME').'.app.invoicexpress.com/',
+	'username'     => '',
+	'password'     => '',
 
 	'endpoints' => [
 		'users' => [

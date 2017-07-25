@@ -57,4 +57,12 @@ class GetTest extends TestCase {
 
 	}
 
+	public function testGetAPIKey()
+	{
+		$client = new InvoiceXpressAPI();
+		$api_key = $client->getAPIKey( '', '');
+
+		$this->assertEquals($this->api_key, $api_key);
+	}
+
 }
