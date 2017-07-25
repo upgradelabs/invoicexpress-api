@@ -177,7 +177,7 @@ $data = $client->toXML();
 client = new InvoiceXpressAPI();
 $client->setMethod('post');
 $client->setUrl(config('invoicexpress.my_url'));
-$client->setEndpoint( endpoint_replace(['12759480'], config('invoicexpress.endpoints.clients.create')));
+$client->setEndpoint( endpoint_replace(['the-client-id'], config('invoicexpress.endpoints.clients.create')));
 $client->setQuery([
         'api_key' => config('invoicexpress.api_key'),
         'client-id' => 'the-client-id',
