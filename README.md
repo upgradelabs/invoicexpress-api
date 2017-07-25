@@ -177,10 +177,10 @@ $data = $client->toXML();
 client = new InvoiceXpressAPI();
 $client->setMethod('post');
 $client->setUrl(config('invoicexpress.my_url'));
-$client->setEndpoint(config('invoicexpress.endpoints.clients.create')
-);
+$client->setEndpoint( endpoint_replace(['12759480'], config('invoicexpress.endpoints.clients.create')));
 $client->setQuery([
         'api_key' => config('invoicexpress.api_key'),
+        'client-id' => 'the-client-id',
         'client' => [
         		'name' => 'My name',
         		'code' => 'My Client Code',
@@ -188,7 +188,10 @@ $client->setQuery([
         		//.... insert more values ....
         ]
     ]);
-$response = $client->talkToAPI();
+$client->talkToAPI();
+$response = $client->toJSON();
+// or
+$response = $client->toXML);
 
 //Do whatever you need with the response
 

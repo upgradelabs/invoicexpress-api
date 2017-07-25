@@ -193,9 +193,9 @@ class InvoiceXpressAPI
 
 	/**
 	 * Send POST request
-	 * @return string
+	 * @return StreamInterface
 	 */
-	private function _post(): string
+	private function _post(): StreamInterface
 	{
 		$response = $this->client->post(
 			$this->getUrl() . $this->getEndpoint(),
@@ -205,14 +205,14 @@ class InvoiceXpressAPI
 			]
 		);
 
-		return $response->getBody()->getContents();
+		return $response->getBody();
 	}
 
 	/**
 	 * Send PUT request
-	 * @return string
+	 * @return StreamInterface
 	 */
-	private function _put(): string
+	private function _put(): StreamInterface
 	{
 		$response = $this->client->put(
 			$this->getUrl() . $this->getEndpoint(),
@@ -222,7 +222,7 @@ class InvoiceXpressAPI
 			]
 		);
 
-		return $response->getBody()->getContents();
+		return $response->getBody();
 	}
 
 	/**
