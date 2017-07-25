@@ -146,7 +146,7 @@ If the client already exists, it updates the values.
 
 ### 3.1.1 One-to-One relationship with Laravel::Auth()
 
-If you wish to have a relation between the InvoiceXpress and your app Users, do the following:
+If you wish to have a relationship between the InvoiceXpress and your app Users, do the following:
 
 ```bash
 $ php artisan vendor:publish --tag=ivxapi-migrateauth
