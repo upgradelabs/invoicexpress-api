@@ -177,10 +177,9 @@ $data = $client->toXML();
 client = new InvoiceXpressAPI();
 $client->setMethod('post');
 $client->setUrl(config('invoicexpress.my_url'));
-$client->setEndpoint( endpoint_replace(['the-client-id'], config('invoicexpress.endpoints.clients.create')));
+$client->setEndpoint( config('invoicexpress.endpoints.clients.create'));
 $client->setQuery([
         'api_key' => config('invoicexpress.api_key'),
-        'client-id' => 'the-client-id',
         'client' => [
         		'name' => 'My name',
         		'code' => 'My Client Code',
@@ -197,7 +196,29 @@ $response = $client->toXML();
 
 //Making a PUT REQUEST
 
-//Is the same as a POST just change the setMethod('PUT')
+$client = new InvoiceXpressAPI();
+	$client->setMethod('put');
+	$client->setUrl(config('invoicexpress.my_url'));
+	$client->setEndpoint(
+		endpoint_replace(['123456789'], config('invoicexpress.endpoints.clients.update'))
+	);
+	$client->setQuery([
+		'api_key' => config('invoicexpress.api_key'),
+		'client-id' => '123456789',
+		'client' => [
+			'name' => 'My awesome Client',
+			'code' => '123',
+			'phone' =>  999888777
+
+		]
+	]);
+	$client->talkToAPI();
+
+	$response = $client->toJSON();
+    // or
+    $response = $client->toXML();
+
+    //Do whatever you need with the response
 
 
 ```
