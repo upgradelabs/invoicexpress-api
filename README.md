@@ -95,8 +95,10 @@ These will be read by the config file:
 
 ```
 
-If you do not want to put your API key in the .env file or prefer to get it every request, you can call the `getAPIKey()` method, this way you can change the API key in your account frequently and not need to update the app.
-In the config file `invoicexpress`, there are 2 empty fields `['username', 'password']` so you can put the username/password there, if you want.
+>If you do not want to put your API key in the .env file, or prefer to get it on every request, you can call the `getAPIKey()` method. This way you can change the API key in your account frequently and not need to update the app.
+
+
+>In the config file `invoicexpress`, there are 2 empty fields `['username', 'password']` so you can put the username/password there, if you want.
 
 ```php
 $client = new InvoiceXpressAPI();
