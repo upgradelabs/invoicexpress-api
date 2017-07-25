@@ -245,6 +245,10 @@ class InvoiceXpressAPI
 
     }
 
+	/**
+	 * Pass to json
+	 * @return string
+	 */
     public function toJSON()
     {
     	return json_encode($this->talkToAPI());
