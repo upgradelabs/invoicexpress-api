@@ -279,6 +279,7 @@ $client->setQuery([
 			'name'  => '{client-name}',
 			'code'  => '{client-code}',
 			'phone' => '{client-phone}'
+			//add more fields if needed
 		]
 	]);
 	
