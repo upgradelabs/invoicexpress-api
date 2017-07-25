@@ -206,15 +206,10 @@ class InvoiceXpressAPI
         $response = $this->client->post(
             $this->getUrl() . $this->getEndpoint(),
             [
-                'headers' => ['Content-Type' => 'application/xml; charset=utf-8'],
+                'headers' => $this->getHeaders(),
                 'query' => $this->getQuery()
             ]
         );
-
-        if ($response->getStatusCode() !== 200)
-        {
-            $this->_post();
-        }
 
         return $response->getBody()->getContents();
     }
