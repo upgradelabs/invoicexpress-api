@@ -166,9 +166,9 @@ class InvoiceXpressAPI
 
     /**
      * Send GET Request
-     *
+     * @return string
      */
-    private function _get()
+    private function _get(): string
     {
         $response = $this->client->get(
             $this->getUrl() . $this->getEndpoint(),
