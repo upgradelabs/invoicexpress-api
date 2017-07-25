@@ -172,6 +172,7 @@ $data = $client->toXML();
 
 
 //Making a POST REQUEST
+// Creating a new Client
 
 client = new InvoiceXpressAPI();
 $client->setMethod('post');
