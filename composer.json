@@ -16,11 +16,12 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": "7.0",
         "guzzlehttp/guzzle": "^6.2.1",
         "guzzlehttp/psr7": "^1.4.1",
         "guzzlehttp/promises": "~1.0",
-        "laravel/framework": "5.4.*"
+        "laravel/framework": "5.4.*",
+        "illuminate/support": "5.4.*"
     },
     "autoload": {
         "psr-4": {
