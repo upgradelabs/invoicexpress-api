@@ -287,7 +287,8 @@ $client->setQuery([
 Then you can run the tests:
 
 ```bash
-vendor/bin/phpunit vendor/rpsimao/invoicexpress-api
+$ cd your-laravel-project-folder
+$ vendor/bin/phpunit vendor/rpsimao/invoicexpress-api
 ```
 
 If all goes well, you should receive:
