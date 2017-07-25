@@ -191,7 +191,7 @@ $client->setQuery([
 $client->talkToAPI();
 $response = $client->toJSON();
 // or
-$response = $client->toXML);
+$response = $client->toXML();
 
 //Do whatever you need with the response
 
