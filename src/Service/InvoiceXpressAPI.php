@@ -155,10 +155,6 @@ class InvoiceXpressAPI
 			case 'PUT':
 				return $this->_put();
 				break;
-
-			case 'DELETE':
-				return $this->_delete();
-				break;
 		}
 	}
 
@@ -229,15 +225,6 @@ class InvoiceXpressAPI
 		);
 
 		return $response->getBody()->getContents();
-	}
-
-	/**
-	 * Send DELETE request
-	 * @return string
-	 */
-	private function _delete(): string
-	{
-
 	}
 
 	/**
