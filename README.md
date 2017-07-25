@@ -170,7 +170,7 @@ public function invoicexpress()
 
 ```
 
-You now have a one-to-one relationship.
+You now have a one-to-one relationship. Now you only have to insert the user_id in the InvoiceXpress table.
 
 
 ### 2 - Interact with the API:
