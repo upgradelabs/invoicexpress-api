@@ -97,7 +97,12 @@ These will be read by the config file:
 
 ## 3) Usage
 
-There are 2 Classes for working with the API
+> ####[ https://invoicexpress.com/api/overview ]()
+> **Check the documentation for the params of the actions.**
+
+
+
+**There are 2 Classes for working with the API:**
 
 ### 1 - Eloquent Model:
 
