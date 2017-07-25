@@ -86,7 +86,6 @@ class InvoiceXpressAPI
 		$data = $this->talkToAPI();
 
 		$xml = simplexml_load_string($data);
-
 		return $xml->account->api_key;
 
 	}
