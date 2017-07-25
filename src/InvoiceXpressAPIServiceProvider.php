@@ -27,13 +27,21 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
             __DIR__.'/../config/invoicexpress.php' => $this->app->configPath().'/invoicexpress.php',
         ], 'ivxapi-config');
 
-        if (! class_exists('CreateInvoiceXpressClientsTable')) {
+        if (! class_exists('CreateInvoiceXpressapiClientsTable')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
                 __DIR__ . '/../database/migrations/create_invoice_xpressapi_clients_table.php.stub' => $this->app->databasePath()."/migrations/{$timestamp}_create_invoice_xpressapi_clients_table.php",
             ], 'ivxapi-migrations');
         }
+
+	    if (! class_exists('AddInvoiceXpressapiUserRelationship')) {
+		    $timestamp = date('Y_m_d_His', time());
+
+		    $this->publishes([
+			    __DIR__ . '/../database/migrations/add_invoice_xpressapi_user_relationship.php.stub' => $this->app->databasePath()."/migrations/{$timestamp}_add_invoice_xpressapi_user_relationship.php",
+		    ], 'ivxapi-migrateauth');
+	    }
 
 
     }

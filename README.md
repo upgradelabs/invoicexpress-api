@@ -113,9 +113,13 @@ $client->setQuery(['api_key' => $api_key]);
 
 ## 3) Usage
 
-> [ https://invoicexpress.com/api/overview ]()
+
 >
 > **Check the documentation for the params of the actions.**
+>
+> See: [ https://invoicexpress.com/api/overview ]()
+>
+
 
 
 
@@ -123,7 +127,7 @@ $client->setQuery(['api_key' => $api_key]);
 
 ### 1 - Eloquent Model:
 
-It has one custom function for retrieve all your customers and put them into the DB.
+It has one custom function, for retrieve all your customers and put them into the DB.
 
 You can make a cron job for retrieving them periodically.
 
@@ -136,7 +140,7 @@ InvoiceXpressClients::getAllClientsFromAPI(true);
 
 
 ```
-If you pass the `true` flag the function insert the clients into the database. `False` or none, it returns an array with all your clients.
+If you pass the `true` flag, the function inserts the clients into the database. `False` or none, returns an array with all your clients.
 
 If the client already exists, it updates the values.
 
