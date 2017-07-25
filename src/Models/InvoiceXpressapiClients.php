@@ -21,6 +21,8 @@ class InvoiceXpressapiClients extends Model
 	    'fax', 'preferred_name', 'preferred_email', 'preferred_phone', 'preferred_mobile', 'observations', 'send_options'
     ];
 
+	protected $guarded = ['client_id'];
+
 	/**
 	 * Retrieve all Clients form API
 	 *
@@ -74,6 +76,7 @@ class InvoiceXpressapiClients extends Model
 	    	$clients[$key] = $client;
 	    }
 	    return $clients;
+
     }
 
 	/**

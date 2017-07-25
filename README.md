@@ -127,8 +127,6 @@ $client = new InvoiceXpressAPI();
 $client->setMethod('GET');
 $client->setUrl(config('invoicexpress.my_url'));
 $client->setEndpoint(config('invoicexpress.endpoints.clients.list_all'));
-
-
 $client->setQuery(['api_key' => config('invoicexpress.api_key')]);
 $data = $client->talkToAPI();
 
@@ -136,6 +134,22 @@ $xml = simplexml_load_string($data);
 
 .....
 //do whatever you need to do
+
+
+// Another GET Request to generate a PDF for an invoice
+
+$client = new InvoiceXpressAPI();
+$client->setMethod('get');
+$client->setUrl(config('invoicexpress.my_url'));
+$client->setEndpoint(
+    endpoint_replace(['12759480'], config('invoicexpress.endpoints.invoices.generate_pdf'))
+);
+$client->setQuery([
+        'api_key' => config('invoicexpress.api_key'),
+        'invoice-id' => '12759480',
+        'second_copy' => true
+    ]);
+$client->talkToAPI();
 
 
 ```

@@ -75,7 +75,7 @@ class InvoiceXpressAPI
     /**
      * @param string $method
      */
-    public function setMethod(string $method)
+    public function setMethod(string $method): void
     {
         $this->method = $method;
     }
@@ -89,8 +89,6 @@ class InvoiceXpressAPI
         return ['Content-Type' => 'application/xml; charset=utf-8'];
     }
 
-
-
     /**
      * @return string
      */
@@ -102,7 +100,7 @@ class InvoiceXpressAPI
     /**
      * @param string $url
      */
-    public function setUrl(string $url)
+    public function setUrl(string $url): void
     {
         $this->url = $url;
     }
@@ -118,7 +116,7 @@ class InvoiceXpressAPI
     /**
      * @param string $endpoint
      */
-    public function setEndpoint(string $endpoint)
+    public function setEndpoint(string $endpoint): void
     {
         $this->endpoint = $endpoint;
     }
@@ -134,7 +132,7 @@ class InvoiceXpressAPI
     /**
      * @param array $query
      */
-    public function setQuery(array $query) :void
+    public function setQuery(array $query): void
     {
         $this->query = $query;
     }
@@ -177,6 +175,13 @@ class InvoiceXpressAPI
             ]
         );
 
+	    /**
+	     * If a 202 header is returned the request will be processed.
+	     * You need to keep requesting until you get a response with HTTP status code 200.
+	     * It sleeps for 7 seconds, for that to happen
+	     * @see https://invoicexpress.com/api/invoices/documents-pdf
+	     */
+
         if ($response->getStatusCode() === 202)
         {
             sleep(7);
@@ -193,9 +198,9 @@ class InvoiceXpressAPI
 
     /**
      * Send POST request
-     * @return StreamInterface
+     * @return string
      */
-    private function _post() :StreamInterface
+    private function _post(): string
     {
 
         $response = $this->client->post(
@@ -211,14 +216,14 @@ class InvoiceXpressAPI
             $this->_post();
         }
 
-        return $response->getBody();
+        return $response->getBody()->getContents();
     }
 
     /**
      * Send PUT request
-     * @return StreamInterface
+     * @return string
      */
-    private function _put() :StreamInterface
+    private function _put(): string
     {
         $response = $this->client->put(
             $this->getUrl() . $this->getEndpoint(),
@@ -228,15 +233,20 @@ class InvoiceXpressAPI
             ]
         );
 
-        return $response->getBody();
+        return $response->getBody()->getContents();
     }
 
     /**
      * Send DELETE request
-     * @return StreamInterface
+     * @return string
      */
-    private function _delete() :StreamInterface
+    private function _delete(): string
     {
 
+    }
+
+    public function toJSON()
+    {
+    	return json_encode($this->talkToAPI());
     }
 }
