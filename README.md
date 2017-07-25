@@ -97,7 +97,8 @@ These will be read by the config file:
 
 ## 3) Usage
 
-> ####[ https://invoicexpress.com/api/overview ]()
+> [ https://invoicexpress.com/api/overview ]()
+
 > **Check the documentation for the params of the actions.**
 
 
