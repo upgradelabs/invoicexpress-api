@@ -5,7 +5,9 @@
 
 Laravel package to interact with InvoiceXpress API
 
-**Everyone is allowed to help getting this package bigger and better!**
+**Tested with Laravel 5.4.***
+
+
 
 ## 1) Install
 
@@ -58,7 +60,7 @@ endpoint_replace(['the-real-value'], config(invoicexpress.enpoints.invoice.gener
 
 ```
 
-The first argument MUST be an array (throw an error if not), and the **number of the itens to replace, must match the items to be replaced in the endpoint**. If not an exception is raised, and a fatal error is thrown.
+The first argument MUST be an array, and the **number of the itens to replace, must match the items to be replaced in the endpoint**. If not an exception is raised, and a fatal error is thrown.
 
 
 
@@ -114,7 +116,7 @@ InvoiceXpressClients::getAllClientsFromAPI(true);
 ```
 If you pass the `true` flag the function insert the clients into the database. `False` or none, it returns an array with all your clients.
 
-If the client already exists, it checks if there are values to be updated, if not, it ignores.
+If the client already exists, it updates the values.
 
 
 ### 2 - Interact with the API:
@@ -161,6 +163,31 @@ $client->talkToAPI();
 $data = $client->toJSON();
 // or
 $data = $client->toXML();
+
+
+//Making a POST REQUEST
+
+client = new InvoiceXpressAPI();
+$client->setMethod('post');
+$client->setUrl(config('invoicexpress.my_url'));
+$client->setEndpoint(config('invoicexpress.endpoints.clients.create')
+);
+$client->setQuery([
+        'api_key' => config('invoicexpress.api_key'),
+        'client' => [
+        		'name' => 'My name',
+        		'code' => 'My Client Code',
+        		'email' => 'client@email.com'
+        		//.... insert more values ....
+        ]
+    ]);
+$response = $client->talkToAPI();
+
+//Do whatever you need with the response
+
+//Making a PUT REQUEST
+
+//Is the same as a POST just change the setMethod('PUT')
 
 
 ```
