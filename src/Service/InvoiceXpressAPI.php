@@ -226,8 +226,10 @@ class InvoiceXpressAPI
 		if (in_array( $response->getStatusCode(),  $responses, true))
 		{
 			return [
-				'header' => $response->getStatusCode(),
-				'message' => 'CREATED'
+				'response' => [
+					'header' => $response->getStatusCode(),
+					'message' => 'CREATED'
+				]
 			];
 		}
 
@@ -257,7 +259,7 @@ class InvoiceXpressAPI
 	{
 		if (is_array(  $this->talkToAPI()))
 		{
-			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
+			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><data></data>');
 			$data = $this->talkToAPI();
 			$this->array_to_xml($data, $xml_data);
 			return  $xml_data->asXML();
