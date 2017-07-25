@@ -13,9 +13,9 @@ class AddInvoiceXpressapiUserRelationship extends Migration
      */
     public function up()
     {
-        Schema::table('invoice_xpressapi_clients', function($table) {
-                $table->integer('user_id')->after('client_id');
-            });
+         Schema::table('invoice_xpressapi_clients', function($table) {
+                        $table->integer('user_id')->unsigned()->nullable()->after('client_id');
+                    });
     }
 
     /**
