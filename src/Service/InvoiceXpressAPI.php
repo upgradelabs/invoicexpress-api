@@ -187,7 +187,6 @@ class InvoiceXpressAPI
 			return $response->getBody();
 		}
 
-
 		return $response->getBody();
 
 	}
@@ -198,7 +197,6 @@ class InvoiceXpressAPI
 	 */
 	private function _post(): string
 	{
-
 		$response = $this->client->post(
 			$this->getUrl() . $this->getEndpoint(),
 			[
