@@ -9,6 +9,7 @@
 namespace rpsimao\InvoiceXpressAPI\Service;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -178,15 +179,16 @@ class InvoiceXpressAPI
 
         if ($response->getStatusCode() === 202)
         {
-            $this->_get();
-            $response->getBody()->getContents();
-            var_dump($response->getStatusCode());
-        }
+            sleep(7);
+            $request = new Request(strtoupper($this->getMethod()), $this->getUrl() . $this->getEndpoint());
+            $response = $this->client->send($request, ['query' => $this->getQuery()]);
 
-        else if ($response->getStatusCode() === 200)
-        {
             return $response->getBody()->getContents();
         }
+
+
+        return $response->getBody()->getContents();
+
     }
 
     /**
