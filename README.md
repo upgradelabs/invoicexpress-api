@@ -211,12 +211,10 @@ $response = $client->toXML();
 //Making a PUT REQUEST
 
 $client = new InvoiceXpressAPI();
-	$client->setMethod('put');
-	$client->setUrl(config('invoicexpress.my_url'));
-	$client->setEndpoint(
-		endpoint_replace(['123456789'], config('invoicexpress.endpoints.clients.update'))
-	);
-	$client->setQuery([
+$client->setMethod('put');
+$client->setUrl(config('invoicexpress.my_url'));
+$client->setEndpoint(endpoint_replace(['123456789'], config('invoicexpress.endpoints.clients.update')));
+$client->setQuery([
 		'api_key' => config('invoicexpress.api_key'),
 		'client-id' => '123456789',
 		'client' => [
@@ -224,16 +222,15 @@ $client = new InvoiceXpressAPI();
 			'code' => '123',
 			'phone' =>  999888777
 			//.... insert more values ....
-
 		]
 	]);
-	$client->talkToAPI();
+$client->talkToAPI();
 
-	$response = $client->toJSON();
-    // or
-    $response = $client->toXML();
+$response = $client->toJSON();
+// or
+$response = $client->toXML();
 
-    //Do whatever you need with the response
+//Do whatever you need with the response
 
 
 ```
