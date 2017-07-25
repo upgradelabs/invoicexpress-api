@@ -128,12 +128,16 @@ $client->setMethod('GET');
 $client->setUrl(config('invoicexpress.my_url'));
 $client->setEndpoint(config('invoicexpress.endpoints.clients.list_all'));
 $client->setQuery(['api_key' => config('invoicexpress.api_key')]);
-$data = $client->talkToAPI();
+$client->talkToAPI();
 
-$xml = simplexml_load_string($data);
+//2 Choices for return JSON or XML
+
+$data = $client->toJSON();
+// or
+$data = $client->toXML();
 
 .....
-//do whatever you need to do
+
 
 
 // Another GET Request to generate a PDF for an invoice
@@ -150,6 +154,12 @@ $client->setQuery([
         'second_copy' => true
     ]);
 $client->talkToAPI();
+
+//2 Choices for return JSON or XML
+
+$data = $client->toJSON();
+// or
+$data = $client->toXML();
 
 
 ```

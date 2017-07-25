@@ -206,15 +206,10 @@ class InvoiceXpressAPI
 		$response = $this->client->post(
 			$this->getUrl() . $this->getEndpoint(),
 			[
-				'headers' => ['Content-Type' => 'application/xml; charset=utf-8'],
+				'headers' => $this->getHeaders(),
 				'query' => $this->getQuery()
 			]
 		);
-
-		if ($response->getStatusCode() !== 200)
-		{
-			$this->_post();
-		}
 
 		return $response->getBody()->getContents();
 	}
@@ -249,7 +244,7 @@ class InvoiceXpressAPI
 	 * Returns values as JSON
 	 *
 	 */
-	public function toJson()
+	public function toJSON()
 	{
 		$xml = simplexml_load_string($this->talkToAPI(), 'SimpleXMLElement', LIBXML_NOCDATA);
 		return json_encode($xml);
