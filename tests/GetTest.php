@@ -8,8 +8,10 @@ class GetTest extends TestCase {
 	/**
 	 * Use your own credentials to run the tests
 	 */
-	protected $url      = '';
-	protected $api_key  = '';
+	protected $url       = '';
+	protected $api_key   = '';
+	protected $username  = '';
+	protected $password  = '';
 
 
 	public function setUp()
@@ -47,7 +49,6 @@ class GetTest extends TestCase {
 				'name' => '',
 				'code' => '',
 				'phone' =>  ''
-
 			]
 		]);
 		$client->talkToAPI();
@@ -60,7 +61,7 @@ class GetTest extends TestCase {
 	public function testGetAPIKey()
 	{
 		$client = new InvoiceXpressAPI();
-		$api_key = $client->getAPIKey( '', '');
+		$api_key = $client->getAPIKey( $this->username, $this->password);
 
 		$this->assertEquals($this->api_key, $api_key);
 	}
