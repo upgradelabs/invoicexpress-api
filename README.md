@@ -144,6 +144,34 @@ If you pass the `true` flag, the function inserts the clients into the database.
 
 If the client already exists, it updates the values.
 
+### 1.1 One-to-One relationship with Laravel::Auth()
+
+If you wish to have a relation between the InvoiceXpress and your app Users, do the following:
+
+```bash
+$ php artisan vendor:publish --tag=ivxapi-migrateauth
+$ php artisan migrate
+```
+
+In your Users Model, add the following method:
+
+```php
+class User extends Model
+{
+.......
+
+//Get the InvoiceXpress Client record associated with the user.
+
+public function invoicexpress()
+{
+	return $this->hasOne('InvoiceXpressClients');
+}
+
+
+```
+
+You now have a one-to-one relationship.
+
 
 ### 2 - Interact with the API:
 ```php
