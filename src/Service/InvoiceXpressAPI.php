@@ -165,9 +165,9 @@ class InvoiceXpressAPI
 
     /**
      * Send GET Request
-     * @return StreamInterface
+     *
      */
-    private function _get() :StreamInterface
+    private function _get()
     {
         $response = $this->client->get(
             $this->getUrl() . $this->getEndpoint(),
@@ -176,7 +176,17 @@ class InvoiceXpressAPI
             ]
         );
 
-        return $response->getBody();
+        if ($response->getStatusCode() === 202)
+        {
+            $this->_get();
+            $response->getBody()->getContents();
+            var_dump($response->getStatusCode());
+        }
+
+        else if ($response->getStatusCode() === 200)
+        {
+            return $response->getBody()->getContents();
+        }
     }
 
     /**
@@ -193,6 +203,11 @@ class InvoiceXpressAPI
                 'query' => $this->getQuery()
             ]
         );
+
+        if ($response->getStatusCode() !== 200)
+        {
+            $this->_post();
+        }
 
         return $response->getBody();
     }
