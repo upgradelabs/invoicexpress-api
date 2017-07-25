@@ -5,7 +5,9 @@
     "keywords": [
         "laravel",
         "rpsimao",
-        "invoicexpress-api"
+        "invoicexpress-api",
+        "invoicexpress",
+        "api"
     ],
     "homepage": "https://github.com/rpsimao/invoicexpress-api",
     "license": "MIT",
