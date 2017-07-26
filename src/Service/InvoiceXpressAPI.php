@@ -11,6 +11,8 @@ namespace rpsimao\InvoiceXpressAPI\Service;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\StreamInterface;
+use GuzzleHttp\Exception\RequestException;
+
 
 /**
  * Class InvoiceXpressAPI
@@ -64,6 +66,43 @@ class InvoiceXpressAPI
 		$this->client = new Client();
 	}
 
+
+	/**
+	 * Handle Status codes
+	 * @param RequestException $e
+	 *
+	 * @return string
+	 */
+	private function StatusCodeHandling(RequestException $e): string
+	{
+		return $e->getResponse()->getBody()->getContents();
+	}
+
+	/**
+	 * @param \Exception $e
+	 * @param $type
+	 *
+	 * @return mixed|string
+	 */
+	private function GenericExceptionHandling(\Exception $e, $type)
+	{
+		$type = strtoupper($type);
+		$data = [
+			'code' => $e->getCode(),
+			'file' => $e->getFile(),
+			'line' => $e->getLine(),
+			'message' => $e->getMessage(),
+		];
+
+		if ($type === 'XML')
+		{
+			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
+			$this->array_to_xml($data, $xml_data);
+			return  $xml_data->asXML();
+		}
+		return json_encode($data);
+	}
+
 	/**
 	 * Method for retrieving you API Key
 	 * @param string $username
@@ -71,22 +110,29 @@ class InvoiceXpressAPI
 	 *
 	 * @return string
 	 */
-
 	public function getAPIKey(string $username, string $password): string
 	{
-		$this->setUrl('https://www.app.invoicexpress.com/');
-		$this->setMethod('post');
-		$this->setEndpoint('login.xml');
-		$this->setQuery([
-			'credentials' => [
-				'login'    => $username,
-				'password' => $password
-			]
-		]);
-		$data = $this->talkToAPI();
+		try
+		{
+			$this->setUrl('https://www.app.invoicexpress.com/');
+			$this->setMethod('post');
+			$this->setEndpoint('login.xml');
+			$this->setQuery([
+				'credentials' => [
+					'login'    => $username,
+					'password' => $password
+				]
+			]);
+			$data = $this->talkToAPI();
 
-		$xml = simplexml_load_string($data);
-		return $xml->account->api_key;
+			$xml = simplexml_load_string($data);
+			return $xml->account->api_key;
+		}
+		catch (RequestException $e)
+		{
+			return $this->StatusCodeHandling($e);
+
+		}
 
 	}
 
@@ -186,52 +232,68 @@ class InvoiceXpressAPI
 
 	/**
 	 * Send GET Request
-	 * @return StreamInterface
+	 * @return mixed
 	 */
-	private function _get(): StreamInterface
+	private function _get()
 	{
-		$response = $this->client->get(
-			$this->getUrl() . $this->getEndpoint(),
-			[
-				'query' => $this->getQuery()
-			]
-		);
-
-		/**
-		 * If a 202 header is returned the request will be processed.
-		 * You need to keep requesting until you get a response with HTTP status code 200.
-		 * It sleeps for 7 seconds, for that to happen
-		 * @see https://invoicexpress.com/api/invoices/documents-pdf
-		 */
-
-		if ($response->getStatusCode() === 202)
+		try
 		{
-			sleep(6);
-			$request = new Request(strtoupper($this->getMethod()), $this->getUrl() . $this->getEndpoint());
-			$response = $this->client->send($request, ['query' => $this->getQuery()]);
+			$response = $this->client->get(
+				$this->getUrl() . $this->getEndpoint(),
+				[
+					'query' => $this->getQuery()
+				]
+			);
+
+			/**
+			 * If a 202 header is returned the request will be processed.
+			 * You need to keep requesting until you get a response with HTTP status code 200.
+			 * It sleeps for 7 seconds, for that to happen
+			 * @see https://invoicexpress.com/api/invoices/documents-pdf
+			 */
+
+			if ($response->getStatusCode() === 202)
+			{
+				sleep(6);
+				$request = new Request(strtoupper($this->getMethod()), $this->getUrl() . $this->getEndpoint());
+				$response = $this->client->send($request, ['query' => $this->getQuery()]);
+
+				return $response->getBody();
+			}
 
 			return $response->getBody();
 		}
+		catch (RequestException $e)
+		{
+			return $this->StatusCodeHandling($e);
 
-		return $response->getBody();
+		}
 
 	}
 
 	/**
 	 * Send POST request
-	 * @return StreamInterface
+	 *
 	 */
-	private function _post(): StreamInterface
+	private function _post()
 	{
-		$response = $this->client->post(
-			$this->getUrl() . $this->getEndpoint(),
-			[
-				'headers' => $this->getHeaders(),
-				'query' => $this->getQuery()
-			]
-		);
+		try
+		{
+			$response = $this->client->post(
+				$this->getUrl() . $this->getEndpoint(),
+				[
+					'headers' => $this->getHeaders(),
+					'query' => $this->getQuery()
+				]
+			);
 
-		return $response->getBody();
+			return $response->getBody();
+		}
+		catch (RequestException $e)
+		{
+			return $this->StatusCodeHandling($e);
+
+		}
 	}
 
 	/**
@@ -240,26 +302,33 @@ class InvoiceXpressAPI
 	 */
 	private function _put()
 	{
-		$response = $this->client->put(
-			$this->getUrl() . $this->getEndpoint(),
-			[
-				'headers' => $this->getHeaders(),
-				'query' => $this->getQuery()
-			]
-		);
-
-		$responses = [200, 201];
-		if (in_array( $response->getStatusCode(),  $responses, true))
-		{
-			return [
-				'response' => [
-					'header' => $response->getStatusCode(),
-					'message' => 'CREATED'
+		try{
+			$response = $this->client->put(
+				$this->getUrl() . $this->getEndpoint(),
+				[
+					'headers' => $this->getHeaders(),
+					'query' => $this->getQuery()
 				]
-			];
-		}
+			);
 
-		return $response->getBody();
+			$responses = [200, 201];
+			if (in_array( $response->getStatusCode(),  $responses, true))
+			{
+				return [
+					'response' => [
+						'header' => $response->getStatusCode(),
+						'message' => 'CREATED'
+					]
+				];
+			}
+
+			return $response->getBody();
+		}
+		catch (RequestException $e)
+		{
+			return $this->StatusCodeHandling($e);
+
+		}
 	}
 
 	/**
@@ -268,13 +337,17 @@ class InvoiceXpressAPI
 	 */
 	public function toJSON()
 	{
-		if (is_array(  $this->talkToAPI()))
-		{
-			return json_encode($this->talkToAPI());
+		try {
+			if ( is_array( $this->talkToAPI() ) ) {
+				return json_encode( $this->talkToAPI() );
+			}
+			$xml = simplexml_load_string( $this->talkToAPI(), 'SimpleXMLElement', LIBXML_NOCDATA );
+			return json_encode( $xml );
 		}
-
-		$xml = simplexml_load_string($this->talkToAPI(), 'SimpleXMLElement', LIBXML_NOCDATA);
-		return json_encode($xml);
+		catch (\Exception $e)
+		{
+			return $this->GenericExceptionHandling($e, 'json');
+		}
 	}
 
 	/**
@@ -283,17 +356,27 @@ class InvoiceXpressAPI
 	 */
 	public function toXML()
 	{
-		if (is_array(  $this->talkToAPI()))
-		{
-			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><data></data>');
-			$data = $this->talkToAPI();
-			$this->array_to_xml($data, $xml_data);
-			return  $xml_data->asXML();
+		try {
+			if (is_array(  $this->talkToAPI()))
+			{
+				$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><data></data>');
+				$data = $this->talkToAPI();
+				$this->array_to_xml($data, $xml_data);
+				return  $xml_data->asXML();
+			}
+			return simplexml_load_string( $this->talkToAPI());
 		}
-
-		return simplexml_load_string( $this->talkToAPI());
+		catch (\Exception $e)
+		{
+			return $this->GenericExceptionHandling($e, 'xml');
+		}
 	}
 
+	/**
+	 * Convert array to XML
+	 * @param array $data
+	 * @param \SimpleXMLElement $xml_data
+	 */
 	private function array_to_xml( array $data, \SimpleXMLElement $xml_data ) {
 		foreach( $data as $key => $value ) {
 			if( is_numeric($key) ){
