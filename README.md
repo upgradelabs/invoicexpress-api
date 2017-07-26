@@ -287,7 +287,7 @@ $response = $client->toXML();
 Currently there are 4 tests available.
 
 1. A GET Request to Retrieve all Clients
-2. A PUT Request to Update Client Informatio
+2. A PUT Request to Update Client Information
 3. A GET Request for retrieve your API key
 4. A GET Request for generate a Invoice PDF 
 
