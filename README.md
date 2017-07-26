@@ -19,6 +19,9 @@ Laravel package to interact with InvoiceXpress API
   * [3.1.1 - One-to-One relationship with Laravel::Auth()](#311---one-to-one-relationship-with-laravel--auth--)
   * [3.2 - Interact with the API](#32---interact-with-the-api)
 - [4 - Tests](#4---tests)
+- [5 - Messages](#5---messages)
+  * [5.1 - Error messages](#51---error-messages)
+  * [5.2 - Success Messages](#52---success-messages)
 
 
 
@@ -325,4 +328,66 @@ If all goes well, you should receive:
 
 ```bash
 OK (4 tests, 4 assertions)
+```
+
+## 5 - Messages
+
+By default all Error / Success messages are returned in XML format.
+If you wish to change to JSON, just add the `setMsgErrorFormat()` and pass the JSON flag:
+
+```php
+.....
+$client = new InvoiceXpressAPI();
+$client->setMsgErrorFormat('json');
+......
+```
+
+### 5.1 - Error messages
+
+This is how the Error Messages are return:
+
+#### XML
+```xml
+<?xml version="1.0"?>
+<response>
+	<API_Error_Code>500</API_Error_Code>
+	<API_Error_Msg>Server error: `GET https://mycompany.app.invoicexpress.com/api/pdf/1234567.xml?api_key=11111abc2222def33333&amp;invoice-id=1234567` resulted in a `500 Internal Server Error` response: An error occured on the server. We have been notified.</API_Error_Msg>
+	<code>0</code>
+	<file>/Code/testapi/vendor/rpsimao/invoicexpress-api/src/Service/InvoiceXpressAPI.php</file>
+	<line>408</line>
+	<message>simplexml_load_string(): Entity: line 1: parser error : Start tag expected, '&amp;lt;' not found</message>
+</response>
+
+```
+
+#### JSON
+```json
+{
+"API_Error_Code":"500",
+"API_Error_Msg":"Server error: `GET https:\/\/mycompany.app.invoicexpress.com\/api\/pdf\/1234567.xml?api_key=11111abc2222def33333&invoice-id=1234567` resulted in a `500 Internal Server Error` response:\nAn error occured on the server. We have been notified.\n\n",
+"code":0,
+"file":"\/Code\/testapi\/vendor\/rpsimao\/invoicexpress-api\/src\/Service\/InvoiceXpressAPI.php",
+"line":385,
+"message":"simplexml_load_string(): Entity: line 1: parser error : Start tag expected, '&lt;' not found"
+} 
+
+```
+
+### 5.2 - Success Messages
+#### XML
+```xml
+<?xml version="1.0"?>
+<response>
+	<code>200</code>
+	<msg>OK</msg>
+</response>
+
+```
+#### JSON
+```json
+{
+"code":"200",
+"msg":"OK"
+} 
+
 ```

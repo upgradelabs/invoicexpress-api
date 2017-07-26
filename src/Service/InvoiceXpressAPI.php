@@ -10,6 +10,8 @@ namespace rpsimao\InvoiceXpressAPI\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Exception\RequestException;
 
@@ -58,6 +60,23 @@ class InvoiceXpressAPI
 	protected $query = [];
 
 	/**
+	 * @var RequestException
+	 */
+	protected $apiErrorMsg;
+
+	/**
+	 * @var RequestException
+	 */
+	protected $apiErrorCode;
+
+	/**
+	 * @var string
+	 */
+	protected $msgErrorFormat = 'xml';
+
+
+
+	/**
 	 * InvoiceXpressAPI constructor.
 	 * Initialize GuzzleHttp\Client
 	 */
@@ -66,74 +85,49 @@ class InvoiceXpressAPI
 		$this->client = new Client();
 	}
 
-
 	/**
-	 * Handle Status codes
-	 * @param RequestException $e
-	 *
 	 * @return string
 	 */
-	private function StatusCodeHandling(RequestException $e): string
-	{
-		return $e->getResponse()->getBody()->getContents();
+	private function getMsgErrorFormat(): string {
+		return $this->msgErrorFormat;
 	}
 
 	/**
-	 * @param \Exception $e
-	 * @param $type
-	 *
-	 * @return mixed|string
+	 * @param string $msgErrorFormat
 	 */
-	private function GenericExceptionHandling(\Exception $e, $type)
-	{
-		$type = strtoupper($type);
-		$data = [
-			'code' => $e->getCode(),
-			'file' => $e->getFile(),
-			'line' => $e->getLine(),
-			'message' => $e->getMessage(),
-		];
+	public function setMsgErrorFormat( string $msgErrorFormat ) {
+		$this->msgErrorFormat = $msgErrorFormat;
+	}
 
-		if ($type === 'XML')
-		{
-			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
-			$this->array_to_xml($data, $xml_data);
-			return  $xml_data->asXML();
-		}
-		return json_encode($data);
+
+	/**
+	 *
+	 */
+	private function getApiErrorCode(): string {
+		return $this->apiErrorCode;
 	}
 
 	/**
-	 * Method for retrieving you API Key
-	 * @param string $username
-	 * @param string $password
-	 *
+	 * @param RequestException $apiErrorCode
+	 */
+	public function setApiErrorCode( RequestException $apiErrorCode ) {
+		$this->apiErrorCode = $apiErrorCode->getCode();
+	}
+
+
+	/**
 	 * @return string
 	 */
-	public function getAPIKey(string $username, string $password): string
+	private function getApiErrorMsg(): string
 	{
-		try
-		{
-			$this->setUrl('https://www.app.invoicexpress.com/');
-			$this->setMethod('post');
-			$this->setEndpoint('login.xml');
-			$this->setQuery([
-				'credentials' => [
-					'login'    => $username,
-					'password' => $password
-				]
-			]);
-			$data = $this->talkToAPI();
+		return $this->apiErrorMsg;
+	}
 
-			$xml = simplexml_load_string($data);
-			return $xml->account->api_key;
-		}
-		catch (RequestException $e)
-		{
-			return $this->StatusCodeHandling($e);
-
-		}
-
+	/**
+	 * @param RequestException $apiErrorMsg
+	 */
+	public function setApiErrorMsg( RequestException $apiErrorMsg ) {
+		$this->apiErrorMsg = $apiErrorMsg->getMessage();
 	}
 
 	/**
@@ -151,7 +145,6 @@ class InvoiceXpressAPI
 	{
 		$this->method = $method;
 	}
-
 
 	/**
 	 * @return array
@@ -208,6 +201,102 @@ class InvoiceXpressAPI
 	{
 		$this->query = $query;
 	}
+
+
+
+	/**
+	 * Handle Status codes
+	 * @param RequestException $e
+	 *
+	 * @return string
+	 */
+	private function StatusCodeHandling(RequestException $e): string
+	{
+		$this->setApiErrorCode($e);
+		$this->setApiErrorMsg($e);
+		return $e->getResponse()->getBody()->getContents();
+	}
+
+	/**
+	 * @param \Exception $e
+	 * @param $type
+	 *
+	 * @return mixed|string
+	 */
+	private function GenericExceptionHandling(\Exception $e, $type)
+	{
+		$type = strtoupper( $type);
+		$data = [
+			'API_Error_Code' => $this->getApiErrorCode(),
+			'API_Error_Msg' => $this->getApiErrorMsg(),
+			'code' => $e->getCode(),
+			'file' => $e->getFile(),
+			'line' => $e->getLine(),
+			'message' => $e->getMessage(),
+		];
+
+		if ($type === 'XML')
+		{
+			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
+			$this->array_to_xml($data, $xml_data);
+			return  $xml_data->asXML();
+		}
+		return json_encode($data);
+	}
+
+	/**
+	 * @param ResponseInterface $m
+	 * @return string
+	 */
+	private function successMsgsCreator(ResponseInterface $m): string
+	{
+		$type = $this->getMsgErrorFormat();
+		$data = [
+			'code' => $m->getStatusCode(),
+			'msg'  => $m->getReasonPhrase(),
+		];
+
+		if (strtoupper($type) === 'XML')
+		{
+			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
+			$this->array_to_xml($data, $xml_data);
+			return  $xml_data->asXML();
+		}
+		return json_encode($data);
+	}
+
+	/**
+	 * Method for retrieving you API Key
+	 * @param string $username
+	 * @param string $password
+	 *
+	 * @return string
+	 */
+	public function getAPIKey(string $username, string $password): string
+	{
+		try
+		{
+			$this->setUrl('https://www.app.invoicexpress.com/');
+			$this->setMethod('post');
+			$this->setEndpoint('login.xml');
+			$this->setQuery([
+				'credentials' => [
+					'login'    => $username,
+					'password' => $password
+				]
+			]);
+			$data = $this->talkToAPI();
+
+			$xml = simplexml_load_string($data);
+			return $xml->account->api_key;
+		}
+		catch (\Exception $e)
+		{
+			return $this->GenericExceptionHandling($e, $this->getMsgErrorFormat());
+		}
+
+	}
+
 
 	/**
 	 * Send requests to InvoiceXpress API
@@ -266,7 +355,6 @@ class InvoiceXpressAPI
 		catch (RequestException $e)
 		{
 			return $this->StatusCodeHandling($e);
-
 		}
 
 	}
@@ -314,12 +402,7 @@ class InvoiceXpressAPI
 			$responses = [200, 201];
 			if (in_array( $response->getStatusCode(),  $responses, true))
 			{
-				return [
-					'response' => [
-						'header' => $response->getStatusCode(),
-						'message' => 'CREATED'
-					]
-				];
+				return $this->successMsgsCreator($response);
 			}
 
 			return $response->getBody();
@@ -346,7 +429,7 @@ class InvoiceXpressAPI
 		}
 		catch (\Exception $e)
 		{
-			return $this->GenericExceptionHandling($e, 'json');
+			return $this->GenericExceptionHandling($e, $this->getMsgErrorFormat());
 		}
 	}
 
@@ -368,15 +451,10 @@ class InvoiceXpressAPI
 		}
 		catch (\Exception $e)
 		{
-			return $this->GenericExceptionHandling($e, 'xml');
+			return $this->GenericExceptionHandling($e, $this->getMsgErrorFormat());
 		}
 	}
 
-	/**
-	 * Convert array to XML
-	 * @param array $data
-	 * @param \SimpleXMLElement $xml_data
-	 */
 	private function array_to_xml( array $data, \SimpleXMLElement $xml_data ) {
 		foreach( $data as $key => $value ) {
 			if( is_numeric($key) ){

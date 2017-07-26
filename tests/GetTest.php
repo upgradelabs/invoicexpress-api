@@ -1,4 +1,10 @@
 <?php
+/**
+ * invoicexpress-api
+ *
+ * rpsimao
+ * 25/07/2017
+ */
 
 use PHPUnit\Framework\TestCase;
 use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
@@ -6,7 +12,7 @@ use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 class GetTest extends TestCase {
 
 	/**
-	 * Use your own credentials|data to run the tests
+	 * Use your own credentials to run the tests
 	 */
 	protected $url          = '';
 	protected $api_key      = '';
@@ -36,7 +42,14 @@ class GetTest extends TestCase {
 		$client->talkToAPI();
 		$data = $client->toJSON();
 
-		$this->assertJson($data);
+		$err = json_decode($data);
+
+		if (isset( $err->code))
+		{
+			$this->fail('Message: ' . $err->message . PHP_EOL . ' File: ' . $err->file . PHP_EOL . ' Line: '. $err->line);
+		} else {
+			$this->assertJson( $data);
+		}
 	}
 
 	public function testCanMakePutRequest()
@@ -58,8 +71,14 @@ class GetTest extends TestCase {
 		]);
 		$client->talkToAPI();
 		$data = $client->toJSON();
+		$err = json_decode($data);
 
-		$this->assertJson($data);
+		if (isset( $err->code))
+		{
+			$this->fail('Message: ' . $err->message . PHP_EOL . ' File: ' . $err->file . PHP_EOL . ' Line: '. $err->line);
+		} else {
+			$this->assertJson( $data);
+		}
 
 	}
 
@@ -85,8 +104,14 @@ class GetTest extends TestCase {
 		]);
 		$client->talkToAPI();
 		$data = $client->toJSON();
+		$err = json_decode($data);
 
-		$this->assertJson($data);
+		if (isset( $err->code))
+		{
+			$this->fail('Message: ' . $err->message . PHP_EOL . ' File: ' . $err->file . PHP_EOL . ' Line: '. $err->line);
+		} else {
+			$this->assertJson( $data);
+		}
 	}
 
 }
