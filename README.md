@@ -7,9 +7,20 @@ Laravel package to interact with InvoiceXpress API
 
 **Tested with Laravel 5.4.***
 
+## Table of Contents
+- [1 - Installation](#1---installation)
+  * [1.1 - Publish configuration](#11---publish-configuration)
+  * [1.2 - Migrations](#12---migrations)
+- [2 - Configuration](#2---configuration)
+- [3 - Usage](#3---usage)
+  * [3.1 - Eloquent Model](#31---eloquent-model)
+  * [3.1.1 - One-to-One relationship with Laravel::Auth()](#311---one-to-one-relationship-with-laravel--auth--)
+  * [3.2 - Interact with the API](#32---interact-with-the-api)
+- [4 - Tests](#4---tests)
 
 
-## 1) Install
+
+## 1 - Installation
 
 Via Composer
 
@@ -38,7 +49,7 @@ rpsimao\InvoiceXpressAPI\InvoiceXpressAPIServiceProvider::class,
 
 ```
 
-### Publish configuration
+### 1.1 - Publish configuration
 
 ```bash
 $ php artisan vendor:publish --tag=ivxapi-config
@@ -64,14 +75,14 @@ The first argument MUST be an array, and the **number of the itens to replace, m
 
 
 
-### Migrations
+### 1.2 - Migrations
 
 ```bash
 $ php artisan vendor:publish --tag=ivxapi-migrations
 $ php artisan migrate
 ```
 
-## 2) Configuration
+## 2 - Configuration
 
 Add to your .env file your API Key and Account name
 
@@ -111,7 +122,7 @@ $client->setQuery(['api_key' => $api_key]);
 
 ```
 
-## 3) Usage
+## 3 - Usage
 
 
 >
@@ -125,7 +136,7 @@ $client->setQuery(['api_key' => $api_key]);
 
 **There are 2 Classes for working with the API:**
 
-### 3.1 - Eloquent Model:
+### 3.1 - Eloquent Model
 
 It has one custom function, for retrieve all your customers and put them into the DB.
 
@@ -144,7 +155,7 @@ If you pass the `true` flag, the function inserts the clients into the database.
 
 If the client already exists, it updates the values.
 
-### 3.1.1 One-to-One relationship with Laravel::Auth()
+### 3.1.1 - One-to-One relationship with Laravel::Auth()
 
 If you wish to have a relationship between the InvoiceXpress and your app Users, do the following:
 
@@ -173,7 +184,7 @@ public function invoicexpress()
 You now have a one-to-one relationship. Now you only have to insert the user_id in the InvoiceXpress table.
 
 
-### 3.2 - Interact with the API:
+### 3.2 - Interact with the API
 ```php
 
 use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
@@ -269,7 +280,7 @@ $response = $client->toXML();
 
 ```
 
-## 4) Tests
+## 4 - Tests
 
 Currently there are 3 tests available.
 
