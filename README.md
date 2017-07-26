@@ -1,5 +1,6 @@
-[![RPSIMAO](https://img.shields.io/packagist/l/rpsimao/invoicexpress-api.svg)]()
-[![RPSIMAO](https://img.shields.io/packagist/v/rpsimao/invoicexpress-api.svg)]()
+[![license](https://img.shields.io/github/license/rpsimao/invoicexpress-api.svg)]()
+[![Packagist release](https://img.shields.io/packagist/v/rpsimao/invoicexpress-api.svg)]()
+[![GitHub release](https://img.shields.io/github/release/rpsimao/invoicexpress-api.svg)]()
 
 # Laravel InvoiceXpress API
 
