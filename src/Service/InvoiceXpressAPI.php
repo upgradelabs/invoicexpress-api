@@ -229,7 +229,6 @@ class InvoiceXpressAPI
 		$data = [
 			'api_code' => $this->getApiErrorCode(),
 			'api_msg' => $this->getApiErrorMsg(),
-			'code' => $e->getCode(),
 			'file' => $e->getFile(),
 			'line' => $e->getLine(),
 			'message' => $e->getMessage(),

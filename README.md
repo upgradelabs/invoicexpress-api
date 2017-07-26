@@ -352,7 +352,6 @@ This is how the Error Messages are returned:
 <response>
 	<api_code>500</api_code>
 	<api_msg>Server error: `GET https://mycompany.app.invoicexpress.com/api/pdf/1234567.xml?api_key=11111abc2222def33333&amp;invoice-id=1234567` resulted in a `500 Internal Server Error` response: An error occured on the server. We have been notified.</api_msg>
-	<code>0</code>
 	<file>/Code/testapi/vendor/rpsimao/invoicexpress-api/src/Service/InvoiceXpressAPI.php</file>
 	<line>408</line>
 	<message>simplexml_load_string(): Entity: line 1: parser error : Start tag expected, '&amp;lt;' not found</message>
@@ -365,7 +364,6 @@ This is how the Error Messages are returned:
 {
 "api_code":"500",
 "api_msg":"Server error: `GET https:\/\/mycompany.app.invoicexpress.com\/api\/pdf\/1234567.xml?api_key=11111abc2222def33333&invoice-id=1234567` resulted in a `500 Internal Server Error` response:\nAn error occured on the server. We have been notified.\n\n",
-"code":0,
 "file":"\/Code\/testapi\/vendor\/rpsimao\/invoicexpress-api\/src\/Service\/InvoiceXpressAPI.php",
 "line":385,
 "message":"simplexml_load_string(): Entity: line 1: parser error : Start tag expected, '&lt;' not found"
