@@ -292,7 +292,7 @@ Currently there are 4 tests available.
 4. A GET Request for generate a Invoice PDF 
 
 
-For them to work, you have to fill with you own credentials:
+For them to work, you have to fill with you own credentials | data:
 
 ```php
 class GetTest extends TestCase {
