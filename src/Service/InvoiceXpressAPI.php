@@ -214,7 +214,18 @@ class InvoiceXpressAPI
 	{
 		$this->setApiErrorCode($e);
 		$this->setApiErrorMsg($e);
-		return $e->getResponse()->getBody()->getContents();
+		$type = strtoupper( $this->getMsgErrorFormat());
+		$data = [
+			'api_code' => $this->getApiErrorCode(),
+			'api_msg' => $this->getApiErrorMsg(),
+		];
+		if ($type === 'XML')
+		{
+			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
+			$this->array_to_xml($data, $xml_data);
+			return  $xml_data->asXML();
+		}
+		return json_encode($data);
 	}
 
 	/**
@@ -226,6 +237,7 @@ class InvoiceXpressAPI
 	private function GenericExceptionHandling(\Exception $e, $type)
 	{
 		$type = strtoupper( $type);
+		$debug = env( 'APP_DEBUG');
 		$data = [
 			'api_code' => $this->getApiErrorCode(),
 			'api_msg' => $this->getApiErrorMsg(),
@@ -233,6 +245,10 @@ class InvoiceXpressAPI
 			'line' => $e->getLine(),
 			'message' => $e->getMessage(),
 		];
+
+		if(!$debug){
+			unset($data['file'], $data['line'], $data['message']);
+		}
 
 		if ($type === 'XML')
 		{
@@ -346,10 +362,10 @@ class InvoiceXpressAPI
 				$request = new Request(strtoupper($this->getMethod()), $this->getUrl() . $this->getEndpoint());
 				$response = $this->client->send($request, ['query' => $this->getQuery()]);
 
-				return $response->getBody();
+				return $this->successMsgsCreator($response);
 			}
 
-			return $response->getBody();
+			return $this->successMsgsCreator($response);
 		}
 		catch (RequestException $e)
 		{
@@ -373,8 +389,7 @@ class InvoiceXpressAPI
 					'query' => $this->getQuery()
 				]
 			);
-
-			return $response->getBody();
+			return $this->successMsgsCreator($response);
 		}
 		catch (RequestException $e)
 		{
@@ -397,14 +412,7 @@ class InvoiceXpressAPI
 					'query' => $this->getQuery()
 				]
 			);
-
-			$responses = [200, 201];
-			if (in_array( $response->getStatusCode(),  $responses, true))
-			{
-				return $this->successMsgsCreator($response);
-			}
-
-			return $response->getBody();
+			return $this->successMsgsCreator($response);
 		}
 		catch (RequestException $e)
 		{
