@@ -297,7 +297,7 @@ For them to work, you have to fill with you own credentials:
 ```php
 class GetTest extends TestCase {
 
-// Use your own credentials to run the tests
+// Use your own credentials|data to run the tests
 
 	protected $url          = '';
 	protected $api_key      = '';
