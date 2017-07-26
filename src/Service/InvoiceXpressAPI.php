@@ -227,8 +227,8 @@ class InvoiceXpressAPI
 	{
 		$type = strtoupper( $type);
 		$data = [
-			'API_Error_Code' => $this->getApiErrorCode(),
-			'API_Error_Msg' => $this->getApiErrorMsg(),
+			'api_code' => $this->getApiErrorCode(),
+			'api_msg' => $this->getApiErrorMsg(),
 			'code' => $e->getCode(),
 			'file' => $e->getFile(),
 			'line' => $e->getLine(),
@@ -252,8 +252,8 @@ class InvoiceXpressAPI
 	{
 		$type = $this->getMsgErrorFormat();
 		$data = [
-			'code' => $m->getStatusCode(),
-			'msg'  => $m->getReasonPhrase(),
+			'api_code' => $m->getStatusCode(),
+			'api_msg'  => $m->getReasonPhrase(),
 		];
 
 		if (strtoupper($type) === 'XML')

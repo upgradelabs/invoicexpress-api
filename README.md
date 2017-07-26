@@ -333,7 +333,7 @@ OK (4 tests, 4 assertions)
 ## 5 - Messages
 
 By default all Error / Success messages are returned in XML format.
-If you wish to change to JSON, just add the `setMsgErrorFormat()` and pass the JSON flag:
+If you wish to change to JSON, just add the `setMsgErrorFormat()` method and pass the JSON flag:
 
 ```php
 .....
@@ -344,14 +344,14 @@ $client->setMsgErrorFormat('json');
 
 ### 5.1 - Error messages
 
-This is how the Error Messages are return:
+This is how the Error Messages are returned:
 
 #### XML
 ```xml
 <?xml version="1.0"?>
 <response>
-	<API_Error_Code>500</API_Error_Code>
-	<API_Error_Msg>Server error: `GET https://mycompany.app.invoicexpress.com/api/pdf/1234567.xml?api_key=11111abc2222def33333&amp;invoice-id=1234567` resulted in a `500 Internal Server Error` response: An error occured on the server. We have been notified.</API_Error_Msg>
+	<api_code>500</api_code>
+	<api_msg>Server error: `GET https://mycompany.app.invoicexpress.com/api/pdf/1234567.xml?api_key=11111abc2222def33333&amp;invoice-id=1234567` resulted in a `500 Internal Server Error` response: An error occured on the server. We have been notified.</api_msg>
 	<code>0</code>
 	<file>/Code/testapi/vendor/rpsimao/invoicexpress-api/src/Service/InvoiceXpressAPI.php</file>
 	<line>408</line>
@@ -363,8 +363,8 @@ This is how the Error Messages are return:
 #### JSON
 ```json
 {
-"API_Error_Code":"500",
-"API_Error_Msg":"Server error: `GET https:\/\/mycompany.app.invoicexpress.com\/api\/pdf\/1234567.xml?api_key=11111abc2222def33333&invoice-id=1234567` resulted in a `500 Internal Server Error` response:\nAn error occured on the server. We have been notified.\n\n",
+"api_code":"500",
+"api_msg":"Server error: `GET https:\/\/mycompany.app.invoicexpress.com\/api\/pdf\/1234567.xml?api_key=11111abc2222def33333&invoice-id=1234567` resulted in a `500 Internal Server Error` response:\nAn error occured on the server. We have been notified.\n\n",
 "code":0,
 "file":"\/Code\/testapi\/vendor\/rpsimao\/invoicexpress-api\/src\/Service\/InvoiceXpressAPI.php",
 "line":385,
@@ -374,20 +374,21 @@ This is how the Error Messages are return:
 ```
 
 ### 5.2 - Success Messages
+This is how the Success Messages are returned:
 #### XML
 ```xml
 <?xml version="1.0"?>
 <response>
-	<code>200</code>
-	<msg>OK</msg>
+	<api_code>200</api_code>
+	<api_msg>OK</api_msg>
 </response>
 
 ```
 #### JSON
 ```json
 {
-"code":"200",
-"msg":"OK"
+"api_code":"200",
+"api_msg":"OK"
 } 
 
 ```
