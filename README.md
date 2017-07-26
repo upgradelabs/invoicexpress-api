@@ -344,9 +344,11 @@ $client->setMsgErrorFormat('json');
 
 ### 5.1 - Error messages
 
-This is how the Error Messages are returned:
 The` api_code` and `api_msg` are the real messages that the InvoiceXpress API returns, the others are just for debugging.
+
 The debugging tags only appears if in the .env file: `APP_DEBUG=true`
+
+This is how the Error Messages are returned:
 
 #### XML
 ```xml
