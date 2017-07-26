@@ -284,50 +284,34 @@ $response = $client->toXML();
 
 ## 4 - Tests
 
-Currently there are 3 tests available.
+Currently there are 4 tests available.
 
-1. A GET Request
-1. A PUT Request
-1. GETAPI
+1. A GET Request to Retrieve all Clients
+2. A PUT Request to Update Client Informatio
+3. A GET Request for retrieve your API key
+4. A GET Request for generate a Invoice PDF 
 
 
 For them to work, you have to fill with you own credentials:
 
 ```php
-.....
 class GetTest extends TestCase {
 
 // Use your own credentials to run the tests
 
-	protected $url       = '';
-	protected $api_key   = '';
-	protected $username  = '';
-	protected $password  = '';
+	protected $url          = '';
+	protected $api_key      = '';
+	protected $username     = '';
+	protected $password     = '';
+	protected $client_id    = '';
+	protected $client_name  = '';
+	protected $client_code  = '';
+	protected $client_phone = '';
+	protected $invoice      = '';
 
 .......
 
 
-```
-
-In the PUT request, fill the apropriated fields:
-
-```php
-.....
-$endpoint = 'clients/{client-id}.xml';
-
-$client = new InvoiceXpressAPI();
-.....
-$client->setQuery([
-	'api_key' => $this->api_key,
-	'client-id' => '{client-id}',
-		'client' => [
-			'name'  => '{client-name}',
-			'code'  => '{client-code}',
-			'phone' => '{client-phone}'
-			//add more fields if needed
-		]
-	]);
-	
 ```
 
 Then you can run the tests:
@@ -340,5 +324,5 @@ $ vendor/bin/phpunit vendor/rpsimao/invoicexpress-api
 If all goes well, you should receive:
 
 ```bash
-OK (3 tests, 3 assertions)
+OK (4 tests, 4 assertions)
 ```
