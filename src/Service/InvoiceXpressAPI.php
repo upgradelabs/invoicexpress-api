@@ -11,8 +11,9 @@ namespace rpsimao\InvoiceXpressAPI\Service;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\ResponseInterface;
+use Spatie\ArrayToXml\ArrayToXml;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
 
 
@@ -72,7 +73,7 @@ class InvoiceXpressAPI
 	/**
 	 * @var string
 	 */
-	protected $msgErrorFormat = 'xml';
+	protected $msgFormat = 'xml';
 
 
 
@@ -88,15 +89,15 @@ class InvoiceXpressAPI
 	/**
 	 * @return string
 	 */
-	private function getMsgErrorFormat(): string {
-		return $this->msgErrorFormat;
+	private function getMsgFormat(): string {
+		return $this->msgFormat;
 	}
 
 	/**
-	 * @param string $msgErrorFormat
+	 * @param string $msgFormat
 	 */
-	public function setMsgErrorFormat( string $msgErrorFormat ) {
-		$this->msgErrorFormat = $msgErrorFormat;
+	public function setMsgFormat( string $msgFormat ) {
+		$this->msgFormat = $msgFormat;
 	}
 
 
@@ -214,16 +215,14 @@ class InvoiceXpressAPI
 	{
 		$this->setApiErrorCode($e);
 		$this->setApiErrorMsg($e);
-		$type = strtoupper( $this->getMsgErrorFormat());
+		$type = strtoupper( $this->getMsgFormat());
 		$data = [
 			'api_code' => $this->getApiErrorCode(),
 			'api_msg' => $this->getApiErrorMsg(),
 		];
 		if ($type === 'XML')
 		{
-			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
-			$this->array_to_xml($data, $xml_data);
-			return  $xml_data->asXML();
+			return ArrayToXml::convert($data, 'response');
 		}
 		return json_encode($data);
 	}
@@ -241,20 +240,22 @@ class InvoiceXpressAPI
 		$data = [
 			'api_code' => $this->getApiErrorCode(),
 			'api_msg' => $this->getApiErrorMsg(),
-			'file' => $e->getFile(),
-			'line' => $e->getLine(),
-			'message' => $e->getMessage(),
+			'stack_trace' => [
+				'_attributes' => ['env' => 'debug'],
+				'file' => $e->getFile(),
+				'line' => $e->getLine(),
+				'message' => $e->getMessage(),
+			],
+
 		];
 
 		if(!$debug){
-			unset($data['file'], $data['line'], $data['message']);
+			unset($data['stack_trace']);
 		}
 
 		if ($type === 'XML')
 		{
-			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
-			$this->array_to_xml($data, $xml_data);
-			return  $xml_data->asXML();
+			return ArrayToXml::convert($data, 'response');
 		}
 		return json_encode($data);
 	}
@@ -265,17 +266,17 @@ class InvoiceXpressAPI
 	 */
 	private function successMsgsCreator(ResponseInterface $m): string
 	{
-		$type = $this->getMsgErrorFormat();
+
+		$type = $this->getMsgFormat();
 		$data = [
 			'api_code' => $m->getStatusCode(),
 			'api_msg'  => $m->getReasonPhrase(),
+			'api_values' => @$this->xml_to_array($m->getBody()->getContents())
 		];
 
 		if (strtoupper($type) === 'XML')
 		{
-			$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><response></response>');
-			$this->array_to_xml($data, $xml_data);
-			return  $xml_data->asXML();
+			return ArrayToXml::convert($data, 'response');
 		}
 		return json_encode($data);
 	}
@@ -287,7 +288,7 @@ class InvoiceXpressAPI
 	 *
 	 * @return string
 	 */
-	public function getAPIKey(string $username, string $password): string
+	public function getAPIKey(string $username, string $password)
 	{
 		try
 		{
@@ -300,16 +301,14 @@ class InvoiceXpressAPI
 					'password' => $password
 				]
 			]);
-			$data = $this->talkToAPI();
+			$xml =  simplexml_load_string($this->talkToAPI());
+			return $xml->api_values->account->api_key;
 
-			$xml = simplexml_load_string($data);
-			return $xml->account->api_key;
 		}
 		catch (\Exception $e)
 		{
-			return $this->GenericExceptionHandling($e, $this->getMsgErrorFormat());
+			return $this->GenericExceptionHandling($e, $this->getMsgFormat());
 		}
-
 	}
 
 
@@ -422,46 +421,9 @@ class InvoiceXpressAPI
 	}
 
 	/**
-	 * Returns values as JSON
-	 *
+	 * @param array $data
+	 * @param \SimpleXMLElement $xml_data
 	 */
-	public function toJSON()
-	{
-		try {
-			if ( is_array( $this->talkToAPI() ) ) {
-				return json_encode( $this->talkToAPI() );
-			}
-			$xml = simplexml_load_string( $this->talkToAPI(), 'SimpleXMLElement', LIBXML_NOCDATA );
-			return json_encode( $xml );
-		}
-		catch (\Exception $e)
-		{
-			return $this->GenericExceptionHandling($e, $this->getMsgErrorFormat());
-		}
-	}
-
-	/**
-	 * Return values as a XML
-	 *
-	 */
-	public function toXML()
-	{
-		try {
-			if (is_array(  $this->talkToAPI()))
-			{
-				$xml_data = new \SimpleXMLElement('<?xml version="1.0"?><data></data>');
-				$data = $this->talkToAPI();
-				$this->array_to_xml($data, $xml_data);
-				return  $xml_data->asXML();
-			}
-			return simplexml_load_string( $this->talkToAPI());
-		}
-		catch (\Exception $e)
-		{
-			return $this->GenericExceptionHandling($e, $this->getMsgErrorFormat());
-		}
-	}
-
 	private function array_to_xml( array $data, \SimpleXMLElement $xml_data ) {
 		foreach( $data as $key => $value ) {
 			if( is_numeric($key) ){
@@ -474,5 +436,16 @@ class InvoiceXpressAPI
 				$xml_data->addChild("$key",htmlspecialchars("$value"));
 			}
 		}
+	}
+
+	/**
+	 * @param \SimpleXMLElement $xml
+	 *
+	 * @return mixed
+	 */
+	private function xml_to_array( $xml)
+	{
+		return json_decode(json_encode((array) simplexml_load_string($xml)),1);
+
 	}
 }

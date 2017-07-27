@@ -201,13 +201,8 @@ $client->setMethod('GET');
 $client->setUrl(config('invoicexpress.my_url'));
 $client->setEndpoint(config('invoicexpress.endpoints.clients.list_all'));
 $client->setQuery(['api_key' => config('invoicexpress.api_key')]);
-$client->talkToAPI();
 
-//2 Choices for return JSON or XML
-
-$data = $client->toJSON();
-// or
-$data = $client->toXML();
+$response = $client->talkToAPI();
 
 .....
 
@@ -226,13 +221,8 @@ $client->setQuery([
         'invoice-id' => '12759480',
         'second_copy' => true
     ]);
-$client->talkToAPI();
+$response = $client->talkToAPI();
 
-//2 Choices for return JSON or XML
-
-$data = $client->toJSON();
-// or
-$data = $client->toXML();
 
 
 //Making a POST REQUEST
@@ -251,10 +241,8 @@ $client->setQuery([
         	//.... insert more values ....
         ]
     ]);
-$client->talkToAPI();
-$response = $client->toJSON();
-// or
-$response = $client->toXML();
+$response = $client->talkToAPI();
+
 
 //Do whatever you need with the response
 
@@ -274,11 +262,8 @@ $client->setQuery([
 		//.... insert more values ....
 		]
 	]);
-$client->talkToAPI();
+$response = $client->talkToAPI();
 
-$response = $client->toJSON();
-// or
-$response = $client->toXML();
 
 //Do whatever you need with the response
 
@@ -333,12 +318,12 @@ OK (4 tests, 4 assertions)
 ## 5 - Messages
 
 By default all Error / Success messages are returned in XML format.
-If you wish to change to JSON, just add the `setMsgErrorFormat()` method and pass the JSON flag:
+If you wish to change to JSON, just add the `setMsgFormat()` method and pass the JSON flag:
 
 ```php
 .....
 $client = new InvoiceXpressAPI();
-$client->setMsgErrorFormat('json');
+$client->setMsgFormat('json');
 ......
 ```
 
@@ -383,14 +368,18 @@ This is how the Success Messages are returned:
 <response>
 	<api_code>200</api_code>
 	<api_msg>OK</api_msg>
+	<api_values><pdfUrl>https://invoicexpress-downloads.s3.amazonaws.com/store_00000_Factura-0000-a.pdf?AWSAccessKeyId=AAKKAAKKK&amp;Expires=1501762080&amp;Signature=vmePXICWhUBRLygwVO6y2Lx6x4M%3D&amp;response-content-disposition=attachment%3B%20filename%3DFactura-0000-a.pdf&amp;response-content-type=application%2Fpdf</pdfUrl></api_values>
 </response>
 
 ```
 #### JSON
 ```json
 {
-"api_code":"200",
-"api_msg":"OK"
-} 
+  "response": {
+    "api_code": "200",
+    "api_msg": "OK",
+    "api_values": { "pdfUrl": "https://invoicexpress-downloads.s3.amazonaws.com/store_00000_Factura-0000-a.pdf?AWSAccessKeyId= AAKKAAKKK&Expires=1501762080&Signature=vmePXICWhUBRLygwVO6y2Lx6x4M%3D&response-content-disposition=attachment%3B%20filename%3DFactura-0000-a.pdf&response-content-type=application%2Fpdf" }
+  }
+}
 
 ```
