@@ -292,9 +292,9 @@ class InvoiceXpressAPI
 	{
 		try
 		{
-			$this->setUrl('https://www.app.invoicexpress.com/');
+			$this->setUrl(config('invoicexpress.app_url'));
 			$this->setMethod('post');
-			$this->setEndpoint('login.xml');
+			$this->setEndpoint(config('invoicexpress.endpoints.login'));
 			$this->setQuery([
 				'credentials' => [
 					'login'    => $username,
