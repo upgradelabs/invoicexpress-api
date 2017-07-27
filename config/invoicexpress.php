@@ -10,7 +10,6 @@ return [
 	'password'     => '',
 
 	'endpoints' => [
-		'login' => 'login.xml',
 		'users' => [
 			'authentication' => 'login.xml',
 			'accounts'       => 'users/accounts.xml',
