@@ -239,14 +239,13 @@ class InvoiceXpressAPI
 		$debug = env( 'APP_DEBUG');
 		$data = [
 			'api_code' => $this->getApiErrorCode(),
-			'api_msg' => $this->getApiErrorMsg(),
+			'api_msg'  => $this->getApiErrorMsg(),
 			'stack_trace' => [
 				'_attributes' => ['env' => 'debug'],
-				'file' => $e->getFile(),
-				'line' => $e->getLine(),
-				'message' => $e->getMessage(),
+				'file'        => $e->getFile(),
+				'line'        => $e->getLine(),
+				'message'     => $e->getMessage(),
 			],
-
 		];
 
 		if(!$debug){
@@ -269,8 +268,8 @@ class InvoiceXpressAPI
 
 		$type = $this->getMsgFormat();
 		$data = [
-			'api_code' => $m->getStatusCode(),
-			'api_msg'  => $m->getReasonPhrase(),
+			'api_code'   => $m->getStatusCode(),
+			'api_msg'    => $m->getReasonPhrase(),
 			'api_values' => @$this->xml_to_array($m->getBody()->getContents())
 		];
 
@@ -301,9 +300,8 @@ class InvoiceXpressAPI
 					'password' => $password
 				]
 			]);
-			$xml =  simplexml_load_string($this->talkToAPI());
-			return $xml->api_values->account->api_key;
-
+			$xml = simplexml_load_string($this->talkToAPI());
+			return (string) $xml->api_values->account->api_key;
 		}
 		catch (\Exception $e)
 		{
@@ -385,7 +383,7 @@ class InvoiceXpressAPI
 				$this->getUrl() . $this->getEndpoint(),
 				[
 					'headers' => $this->getHeaders(),
-					'query' => $this->getQuery()
+					'query'   => $this->getQuery()
 				]
 			);
 			return $this->successMsgsCreator($response);
@@ -393,7 +391,6 @@ class InvoiceXpressAPI
 		catch (RequestException $e)
 		{
 			return $this->StatusCodeHandling($e);
-
 		}
 	}
 
@@ -408,7 +405,7 @@ class InvoiceXpressAPI
 				$this->getUrl() . $this->getEndpoint(),
 				[
 					'headers' => $this->getHeaders(),
-					'query' => $this->getQuery()
+					'query'   => $this->getQuery()
 				]
 			);
 			return $this->successMsgsCreator($response);
@@ -433,7 +430,7 @@ class InvoiceXpressAPI
 				$subnode = $xml_data->addChild($key);
 				$this->array_to_xml($value, $subnode);
 			} else {
-				$xml_data->addChild("$key",htmlspecialchars("$value"));
+				$xml_data->addChild("$key", htmlspecialchars("$value"));
 			}
 		}
 	}
