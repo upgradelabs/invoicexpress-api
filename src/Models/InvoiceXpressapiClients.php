@@ -5,6 +5,7 @@ use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Model;
 use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 
+
 /**
  * Class InvoiceXpressapiClients
  * @package rpsimao
@@ -81,37 +82,43 @@ class InvoiceXpressapiClients extends Model
 	 */
 	public function insertClients(string $data): Response {
 
-		$xml = simplexml_load_string( $data );
+		try {
+			$xml = simplexml_load_string( $data );
 
-		foreach ( $xml->api_values->client as $client ) {
-			$sql = $this->updateOrCreate( [ 'client_id' => $client->id ], [
-				'client_id'        => $client->id,
-				'name'             => $client->name,
-				'code'             => $client->code,
-				'email'            => $client->email,
-				'language'         => $client->language,
-				'address'          => $client->address,
-				'city'             => $client->city,
-				'postal_code'      => $client->postal_code,
-				'fiscal_id'        => $client->fiscal_id,
-				'website'          => $client->website,
-				'country'          => $client->country,
-				'phone'            => $client->phone,
-				'fax'              => $client->fax,
-				'preferred_name'   => $client->preferred_contact->name,
-				'preferred_email'  => $client->preferred_contact->email,
-				'preferred_phone'  => $client->preferred_contact->phone,
-				'preferred_mobile' => $client->preferred_contact->mobile,
-				'observations'     => $client->observations,
-				'send_options'     => $client->send_options,
-				'created_at'       => ( new \DateTime() )->format( 'Y-m-d H:i:s' ),
-				'updated_at'       => ( new \DateTime() )->format( 'Y-m-d H:i:s' ),
-			] )->save();
+			foreach ( $xml->api_values->client as $client ) {
+				$sql = $this->updateOrCreate( [ 'client_id' => $client->id ], [
+					'client_id'        => $client->id,
+					'name'             => $client->name,
+					'code'             => $client->code,
+					'email'            => $client->email,
+					'language'         => $client->language,
+					'address'          => $client->address,
+					'city'             => $client->city,
+					'postal_code'      => $client->postal_code,
+					'fiscal_id'        => $client->fiscal_id,
+					'website'          => $client->website,
+					'country'          => $client->country,
+					'phone'            => $client->phone,
+					'fax'              => $client->fax,
+					'preferred_name'   => $client->preferred_contact->name,
+					'preferred_email'  => $client->preferred_contact->email,
+					'preferred_phone'  => $client->preferred_contact->phone,
+					'preferred_mobile' => $client->preferred_contact->mobile,
+					'observations'     => $client->observations,
+					'send_options'     => $client->send_options,
+					'created_at'       => ( new \DateTime() )->format( 'Y-m-d H:i:s' ),
+					'updated_at'       => ( new \DateTime() )->format( 'Y-m-d H:i:s' ),
+				] )->save();
+			}
+
+			return $sql ?
+				response( 'Clients inserted' )
+				:
+				response( 'Insert Error', 500 );
 		}
-
-		return $sql ?
-			response( 'Clients inserted' )
-			:
-			response( 'Insert Error', 500 );
+		catch ( \Exception $e)
+		{
+			response( $e->getMessage(), $e->getCode() );
+		}
 	}
 }
