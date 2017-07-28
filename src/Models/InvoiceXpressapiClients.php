@@ -1,8 +1,8 @@
 <?php
 namespace rpsimao\InvoiceXpressAPI\Models;
 
+use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Model;
-use Psr\Http\Message\StreamInterface;
 use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 
 
@@ -16,10 +16,10 @@ use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 
 class InvoiceXpressapiClients extends Model
 {
-    protected $fillable = [
-    	'client_id', 'name', 'code', 'email', 'language', 'address', 'city', 'postal_code', 'fiscal_id', 'website', 'country', 'phone',
-	    'fax', 'preferred_name', 'preferred_email', 'preferred_phone', 'preferred_mobile', 'observations', 'send_options'
-    ];
+	protected $fillable = [
+		'client_id', 'name', 'code', 'email', 'language', 'address', 'city', 'postal_code', 'fiscal_id', 'website', 'country', 'phone',
+		'fax', 'preferred_name', 'preferred_email', 'preferred_phone', 'preferred_mobile', 'observations', 'send_options'
+	];
 
 	protected $guarded = ['client_id'];
 
@@ -29,65 +29,63 @@ class InvoiceXpressapiClients extends Model
 	 * @param bool $insert //flag for inserting into DB
 	 * @return mixed
 	 */
-    public function getAllClientsFromAPI($insert = false){
+	public function getAllClientsFromAPI($insert = false){
 
-    	$client = new InvoiceXpressAPI();
-    	$client->setMethod('GET');
-    	$client->setUrl(config('invoicexpress.my_url'));
-    	$client->setEndpoint(config('invoicexpress.endpoints.clients.list_all'));
+		$client = new InvoiceXpressAPI();
+		$client->setMethod('GET');
+		$client->setUrl(config('invoicexpress.my_url'));
+		$client->setEndpoint(config('invoicexpress.endpoints.clients.list_all'));
 
 
-    	$client->setQuery(['api_key' => config('invoicexpress.api_key')]);
-        $data = $client->talkToAPI();
+		$client->setQuery(['api_key' => config('invoicexpress.api_key')]);
+		$data = $client->talkToAPI();
 
-	    $xml = simplexml_load_string($data);
-	    $pages = (int) $xml->total_pages;
-	    $clients = [];
+		$xml = simplexml_load_string($data);
+		$pages = (int) $xml->api_values->total_pages;
+		$clients = [];
 
-	   for ($i = 1; $i <= $pages; $i++) {
-           $client->setQuery([
-               'api_key' => config('invoicexpress.api_key'),
-               'page'    => $i,
-           ]);
+		for ($i = 1; $i <= $pages; $i++) {
+			$client->setQuery([
+				'api_key' => config('invoicexpress.api_key'),
+				'page'    => $i,
+			]);
 
-           if($insert)
-           {
-            	$this->insertClients($client->talkToAPI());
-           } else {
+			$insert ?
+				$clients = $this->insertClients($client->talkToAPI())
+				:
 				$clients[] = $this->agregateClients( $client->talkToAPI());
-           }
-	   }
-	    return $clients;
-
-    }
+		}
+		return $clients;
+	}
 
 	/**
 	 * Join all clients in an array
-	 * @param  StreamInterface $xml
+	 * @param  string $xml
 	 *
 	 * @return array
 	 */
-    private function agregateClients( StreamInterface $xml) :array
-    {
-    	$clients = [];
-	    $xml  = simplexml_load_string(  $xml );
+	private function agregateClients( string $xml): array
+	{
+		$clients = [];
+		$xml  = simplexml_load_string( $xml );
 
-	    foreach ( $xml->client as $key => $client ) {
-	    	$clients[$key] = $client;
-	    }
-	    return $clients;
+		foreach ( $xml->api_values->client as $client ) {
+			$clients[] = $client;
+		}
+		return $clients;
 
-    }
+	}
 
 	/**
-	 * @param StreamInterface $xml
-	 * @return string
+	 * @param string $data
+	 * @return Response
 	 */
-    public function insertClients(StreamInterface $xml) :string {
+	public function insertClients(string $data): Response {
 
-    	$xml  = simplexml_load_string( $xml );
-    	foreach ( $xml->client as $client ) {
-			$sql = $this->updateOrCreate(['client_id' => $client->id], [
+		$xml = simplexml_load_string( $data );
+
+		foreach ( $xml->api_values->client as $client ) {
+			$sql = $this->updateOrCreate( [ 'client_id' => $client->id ], [
 				'client_id'        => $client->id,
 				'name'             => $client->name,
 				'code'             => $client->code,
@@ -107,16 +105,14 @@ class InvoiceXpressapiClients extends Model
 				'preferred_mobile' => $client->preferred_contact->mobile,
 				'observations'     => $client->observations,
 				'send_options'     => $client->send_options,
-				'created_at'       => (new \DateTime())->format('Y-m-d H:i:s'),
-				'updated_at'       => (new \DateTime())->format('Y-m-d H:i:s'),
-			])->save();
+				'created_at'       => ( new \DateTime() )->format( 'Y-m-d H:i:s' ),
+				'updated_at'       => ( new \DateTime() )->format( 'Y-m-d H:i:s' ),
+			] )->save();
+		}
 
-		    if ($sql){
-			    $resp =  response('Clients inserted')->header('Content-Type', 'text/plain');
-		    } else {
-			    $resp =  response('Insert Error', 500)->header('Content-Type', 'text/plain');
-		    }
-    	}
-    	return $resp;
-    }
+		return $sql ?
+			response( 'Clients inserted' )
+			:
+			response( 'Insert Error', 500 );
+	}
 }
