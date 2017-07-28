@@ -5,7 +5,6 @@ use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Model;
 use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 
-
 /**
  * Class InvoiceXpressapiClients
  * @package rpsimao
