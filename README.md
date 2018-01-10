@@ -7,7 +7,7 @@
 
 Laravel package to interact with InvoiceXpress API
 
-**Tested with Laravel 5.4.***
+**Tested with Laravel 5.5.***
 
 ## Table of Contents
 - [1 - Installation](#1---installation)
@@ -34,6 +34,7 @@ $ composer require rpsimao/invoicexpress-api
 ```
 
 In your config/app.php, register Providers and the Facade
+(Not needed for Laravel 5.5 upwards)
 
 ``` php
 'providers' => [
