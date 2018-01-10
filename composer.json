@@ -42,5 +42,15 @@
         "psr-4": {
             "rpsimao\\InvoiceXpressAPI\\Test\\": "tests/"
         }
+    },
+    "extra": {
+    "laravel": {
+        "providers": [
+            "rpsimao\\InvoiceXpressAPI\\InvoiceXpressAPIServiceProvider"
+        ],
+        "aliases": {
+            "InvoiceXpressClients": "rpsimao\\InvoiceXpressAPI\\InvoiceXpressAPIFacade"
+           }
+        }
     }
 }
