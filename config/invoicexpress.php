@@ -139,7 +139,7 @@ return [
 			'delete'            => 'items/{item-id}.xml',
 			'list_all'          => 'items.xml'
 		],
-		'fees_notes' => [
+		'purchase_orders' => [
 			'create'            => 'purchase_orders.xml',
 			'get'               => 'purchase_orders/{purchase-order-id}.xml',
 			'update'            => 'purchase_orders/{purchase-order-id}.xml',
