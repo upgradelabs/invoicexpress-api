@@ -6,8 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use rpsimao\InvoiceXpressAPI\Service\InvoiceXpressAPI;
 use rpsimao\InvoiceXpressAPI\Models\InvoiceXpressapiClients;
 
-class InvoiceXpressAPIServiceProvider extends ServiceProvider
-{
+class InvoiceXpressAPIServiceProvider extends ServiceProvider {
 
     /**
      * Indicates if loading of the provider is deferred.
@@ -21,8 +20,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
+    public function boot() {
          $this->publishes([
             __DIR__.'/../config/invoicexpress.php' => $this->app->configPath().'/invoicexpress.php',
         ], 'ivxapi-config');
@@ -51,8 +49,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
+    public function register() {
 	    $this->mergeConfigFrom(
 		    __DIR__.'/../config/invoicexpress.php',
 		    'invoicexpress'
@@ -76,8 +73,7 @@ class InvoiceXpressAPIServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function provides()
-    {
+    public function provides() {
         return ['InvoiceXpressAPI', 'InvoiceXpressapiClients'];
     }
 
